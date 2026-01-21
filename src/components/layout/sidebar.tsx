@@ -1,8 +1,8 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserButton } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -11,6 +11,7 @@ import {
   MessageSquare,
   CreditCard,
   Settings,
+  User,
 } from 'lucide-react'
 
 const navigation = [
@@ -21,6 +22,39 @@ const navigation = [
   { name: 'プラン・課金', href: '/billing', icon: CreditCard },
   { name: '設定', href: '/settings', icon: Settings },
 ]
+
+function isClerkConfigured(): boolean {
+  if (typeof window === 'undefined') return false
+  const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+  if (!key) return false
+  return (key.startsWith('pk_test_') || key.startsWith('pk_live_')) && !key.includes('YOUR_')
+}
+
+function UserAvatar() {
+  const [ClerkUserButton, setClerkUserButton] = useState<React.ComponentType<{ afterSignOutUrl: string }> | null>(null)
+  const [isConfigured, setIsConfigured] = useState(false)
+
+  useEffect(() => {
+    const configured = isClerkConfigured()
+    setIsConfigured(configured)
+
+    if (configured) {
+      import('@clerk/nextjs').then((mod) => {
+        setClerkUserButton(() => mod.UserButton)
+      })
+    }
+  }, [])
+
+  if (!isConfigured || !ClerkUserButton) {
+    return (
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+        <User className="h-4 w-4 text-gray-500" />
+      </div>
+    )
+  }
+
+  return <ClerkUserButton afterSignOutUrl="/" />
+}
 
 export function Sidebar() {
   const pathname = usePathname()
@@ -56,7 +90,7 @@ export function Sidebar() {
 
       <div className="border-t p-4">
         <div className="flex items-center gap-3">
-          <UserButton afterSignOutUrl="/" />
+          <UserAvatar />
           <span className="text-sm text-gray-600">マイアカウント</span>
         </div>
       </div>

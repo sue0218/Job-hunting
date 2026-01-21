@@ -8,6 +8,7 @@ import {
   jsonb,
   date,
 } from 'drizzle-orm/pg-core'
+import { relations } from 'drizzle-orm'
 
 // Users table (synced with Clerk)
 export const users = pgTable('users', {
@@ -70,11 +71,16 @@ export const interviewSessions = pgTable('interview_sessions', {
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
   title: text('title'),
+  type: text('type').default('general'), // general, experience, company
+  interviewerType: text('interviewer_type').default('standard'), // standard, friendly, strict, logical
   companyName: text('company_name'),
   position: text('position'),
+  experienceId: uuid('experience_id'), // 単一の経験を参照
   experienceIds: uuid('experience_ids').array(),
   esDocumentIds: uuid('es_document_ids').array(),
-  status: text('status').default('active').notNull(), // active, completed
+  status: text('status').default('in_progress').notNull(), // in_progress, completed
+  feedback: text('feedback'), // セッション終了後のフィードバック
+  rating: integer('rating'), // 1-5の評価
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -146,6 +152,28 @@ export const featureFlags = pgTable('feature_flags', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  experiences: many(experiences),
+  esDocuments: many(esDocuments),
+  interviewSessions: many(interviewSessions),
+}))
+
+export const interviewSessionsRelations = relations(interviewSessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [interviewSessions.userId],
+    references: [users.id],
+  }),
+  turns: many(interviewTurns),
+}))
+
+export const interviewTurnsRelations = relations(interviewTurns, ({ one }) => ({
+  session: one(interviewSessions, {
+    fields: [interviewTurns.sessionId],
+    references: [interviewSessions.id],
+  }),
+}))
 
 // Type exports
 export type User = typeof users.$inferSelect

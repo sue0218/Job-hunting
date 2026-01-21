@@ -63,7 +63,7 @@ export function Sidebar() {
     <div className="flex h-full w-64 flex-col border-r bg-white">
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-primary">ShukatsuCraft</span>
+          <span className="text-xl font-bold text-primary">ガクチカバンクAI</span>
         </Link>
       </div>
 

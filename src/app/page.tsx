@@ -9,7 +9,7 @@ export default function LandingPage() {
       {/* Header */}
       <header className="border-b bg-white">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          <span className="text-xl font-bold text-primary">ShukatsuCraft</span>
+          <span className="text-xl font-bold text-primary">ガクチカバンクAI</span>
           <div className="flex items-center gap-4">
             <Link href="/sign-in">
               <Button variant="ghost">ログイン</Button>
@@ -27,9 +27,9 @@ export default function LandingPage() {
           就活を、もっとスマートに。
         </h1>
         <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600">
-          経験を構造化し、ES作成・面接練習をAIがサポート。
+          ガクチカを1回登録すれば、何社でも使える。
           <br />
-          短時間で「提出可能なES」と「面接で話せる回答」まで到達。
+          AIがES生成・面接練習・整合性チェックまで一気通貫でサポート。
         </p>
         <div className="flex justify-center gap-4">
           <Link href="/sign-up">
@@ -218,7 +218,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t bg-white py-8">
         <div className="mx-auto max-w-7xl px-4 text-center text-sm text-gray-500">
-          <p>&copy; 2026 ShukatsuCraft. All rights reserved.</p>
+          <p>&copy; 2026 ガクチカバンクAI. All rights reserved.</p>
         </div>
       </footer>
     </div>

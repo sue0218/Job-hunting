@@ -15,9 +15,15 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'ShukatsuCraft - 就活支援プロダクト',
+  title: 'ガクチカバンクAI - 経験を資産に、ESも面接もブレない就活',
   description:
-    '経験を構造化し、ES作成・面接練習をAIがサポート。短時間で「提出可能なES」と「面接で話せる回答」まで到達。',
+    'ガクチカを1回登録すれば、何社でも使える。STAR形式で経験を整理し、AIがES生成・面接練習・整合性チェックまで一気通貫でサポート。',
+  keywords: ['ガクチカ', '就活', 'ES', '面接練習', 'AI', 'エントリーシート', 'STAR'],
+  openGraph: {
+    title: 'ガクチカバンクAI',
+    description: '経験を資産に、ESも面接もブレない就活',
+    siteName: 'ガクチカバンクAI',
+  },
 }
 
 export default function RootLayout({

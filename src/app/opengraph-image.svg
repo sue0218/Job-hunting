@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a"/>
+      <stop offset="50%" style="stop-color:#1d4ed8"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="white" opacity="0.03"/>
+  <circle cx="1100" cy="530" r="300" fill="white" opacity="0.03"/>
+  <circle cx="900" cy="100" r="150" fill="white" opacity="0.02"/>
+
+  <!-- Icon -->
+  <g transform="translate(100, 215)">
+    <rect width="200" height="200" rx="40" fill="white"/>
+    <path d="M50 62 L50 138 Q50 150 62 150 L112 150 L112 125 L75 125 L75 75 L125 75 L125 100 L100 100 L100 125 L150 125 L150 62 Q150 50 138 50 L62 50 Q50 50 50 62 Z" fill="url(#iconGrad)"/>
+    <circle cx="150" cy="50" r="25" fill="#60a5fa"/>
+    <circle cx="150" cy="50" r="12" fill="white"/>
+  </g>
+
+  <!-- Text -->
+  <text x="350" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="white">ガクチカバンクAI</text>
+  <text x="350" y="370" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="white" opacity="0.9">経験を資産に、ESも面接もブレない就活</text>
+
+  <!-- Features -->
+  <g transform="translate(350, 430)" fill="white" opacity="0.8" font-family="system-ui, -apple-system, sans-serif" font-size="24">
+    <text x="0" y="0">✓ 経験DB</text>
+    <text x="180" y="0">✓ ES自動生成</text>
+    <text x="400" y="0">✓ 面接練習</text>
+    <text x="580" y="0">✓ 整合性チェック</text>
+  </g>
+
+  <!-- URL -->
+  <text x="350" y="550" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="white" opacity="0.7">gakuchika-bank.com</text>
+</svg>

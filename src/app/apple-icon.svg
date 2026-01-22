@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+
+  <!-- Stylized "G" that looks like a vault/book - scaled up -->
+  <path d="M45 56 L45 124 Q45 135 56 135 L101 135 L101 112 L68 112 L68 68 L112 68 L112 90 L90 90 L90 112 L135 112 L135 56 Q135 45 124 45 L56 45 Q45 45 45 56 Z" fill="white"/>
+
+  <!-- AI dot -->
+  <circle cx="135" cy="45" r="22" fill="#60a5fa"/>
+  <circle cx="135" cy="45" r="11" fill="white"/>
+</svg>

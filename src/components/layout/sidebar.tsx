@@ -12,6 +12,7 @@ import {
   CreditCard,
   Settings,
   User,
+  Sparkles,
 } from 'lucide-react'
 
 const navigation = [
@@ -47,8 +48,8 @@ function UserAvatar() {
 
   if (!isConfigured || !ClerkUserButton) {
     return (
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
-        <User className="h-4 w-4 text-gray-500" />
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+        <User className="h-4 w-4 text-primary" />
       </div>
     )
   }
@@ -63,7 +64,10 @@ export function Sidebar() {
     <div className="flex h-full w-64 flex-col border-r bg-white">
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-primary">ガクチカバンクAI</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <Sparkles className="h-4 w-4 text-white" />
+          </div>
+          <span className="text-lg font-bold text-foreground">ガクチカバンク</span>
         </Link>
       </div>
 
@@ -75,10 +79,10 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-primary text-white shadow-md shadow-primary/25'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
             >
               <item.icon className="h-5 w-5" />
@@ -89,9 +93,9 @@ export function Sidebar() {
       </nav>
 
       <div className="border-t p-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
           <UserAvatar />
-          <span className="text-sm text-gray-600">マイアカウント</span>
+          <span className="text-sm font-medium text-foreground">マイアカウント</span>
         </div>
       </div>
     </div>

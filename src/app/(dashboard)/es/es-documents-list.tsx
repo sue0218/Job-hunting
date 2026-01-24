@@ -60,19 +60,19 @@ export function EsDocumentsList({ initialDocuments, trialEndsAt, dbPlan }: EsDoc
   })
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">ES作成</h1>
-          <p className="text-gray-500">
-            経験DBを基にESを自動生成 ・{' '}
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">ES作成</h1>
+          <p className="text-sm sm:text-base text-gray-500">
+            経験DBを基にAI生成 ・{' '}
             <span className={isLimitReached ? 'text-red-500 font-medium' : ''}>
               今月 {monthlyCount} / {limits.esGenerationsPerMonth} 回
             </span>
           </p>
         </div>
-        <Link href="/es/new">
-          <Button disabled={isLimitReached || isPending}>
+        <Link href="/es/new" className="w-full sm:w-auto">
+          <Button disabled={isLimitReached || isPending} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             ES生成
           </Button>
@@ -80,14 +80,14 @@ export function EsDocumentsList({ initialDocuments, trialEndsAt, dbPlan }: EsDoc
       </div>
 
       {isLimitReached && (
-        <Card className="mb-6 border-yellow-200 bg-yellow-50">
-          <CardContent className="pt-6">
-            <p className="text-yellow-800">
-              Freeプランの今月の上限（{limits.esGenerationsPerMonth}回）に達しました。
-              <Link href="/billing" className="ml-2 underline font-medium">
-                Standardプランにアップグレード
+        <Card className="mb-4 sm:mb-6 border-yellow-200 bg-yellow-50">
+          <CardContent className="p-4 sm:pt-6">
+            <p className="text-sm sm:text-base text-yellow-800">
+              今月の上限（{limits.esGenerationsPerMonth}回）に達しました。
+              <Link href="/billing" className="ml-1 sm:ml-2 underline font-medium">
+                アップグレード
               </Link>
-              すると月30回まで生成できます。
+              で月30回まで。
             </p>
           </CardContent>
         </Card>
@@ -95,8 +95,8 @@ export function EsDocumentsList({ initialDocuments, trialEndsAt, dbPlan }: EsDoc
 
       {/* Search */}
       {esDocuments.length > 0 && (
-        <div className="mb-6 flex gap-4">
-          <div className="relative flex-1">
+        <div className="mb-4 sm:mb-6">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
               placeholder="ESを検索..."
@@ -110,7 +110,7 @@ export function EsDocumentsList({ initialDocuments, trialEndsAt, dbPlan }: EsDoc
 
       {/* ES List */}
       {filteredDocuments.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredDocuments.map((doc) => (
             <EsDocumentCard key={doc.id} document={doc} onDelete={handleDelete} />
           ))}

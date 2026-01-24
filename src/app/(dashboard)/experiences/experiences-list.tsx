@@ -72,19 +72,19 @@ export function ExperiencesList({ initialExperiences, trialEndsAt, dbPlan }: Exp
   })
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">経験DB</h1>
-          <p className="text-gray-500">
-            あなたの経験をSTAR形式で管理 ・{' '}
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">経験DB</h1>
+          <p className="text-sm sm:text-base text-gray-500">
+            STAR形式で管理 ・{' '}
             <span className={isLimitReached ? 'text-red-500 font-medium' : ''}>
               {experiences.length} / {limits.experiences === Infinity ? '∞' : limits.experiences} 件
             </span>
           </p>
         </div>
-        <Link href="/experiences/new">
-          <Button disabled={isLimitReached || isPending}>
+        <Link href="/experiences/new" className="w-full sm:w-auto">
+          <Button disabled={isLimitReached || isPending} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             新規作成
           </Button>
@@ -92,14 +92,14 @@ export function ExperiencesList({ initialExperiences, trialEndsAt, dbPlan }: Exp
       </div>
 
       {isLimitReached && (
-        <Card className="mb-6 border-yellow-200 bg-yellow-50">
-          <CardContent className="pt-6">
-            <p className="text-yellow-800">
+        <Card className="mb-4 sm:mb-6 border-yellow-200 bg-yellow-50">
+          <CardContent className="p-4 sm:pt-6">
+            <p className="text-sm sm:text-base text-yellow-800">
               Freeプランの上限（{limits.experiences}件）に達しました。
-              <Link href="/billing" className="ml-2 underline font-medium">
-                Standardプランにアップグレード
+              <Link href="/billing" className="ml-1 sm:ml-2 underline font-medium">
+                アップグレード
               </Link>
-              すると無制限に登録できます。
+              で無制限に。
             </p>
           </CardContent>
         </Card>
@@ -107,8 +107,8 @@ export function ExperiencesList({ initialExperiences, trialEndsAt, dbPlan }: Exp
 
       {/* Search */}
       {experiences.length > 0 && (
-        <div className="mb-6 flex gap-4">
-          <div className="relative flex-1">
+        <div className="mb-4 sm:mb-6">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
               placeholder="経験を検索..."
@@ -122,7 +122,7 @@ export function ExperiencesList({ initialExperiences, trialEndsAt, dbPlan }: Exp
 
       {/* Experience List */}
       {filteredExperiences.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredExperiences.map((experience) => (
             <ExperienceCard
               key={experience.id}

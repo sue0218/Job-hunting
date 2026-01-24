@@ -94,36 +94,36 @@ export function BillingContent({
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">プラン・課金</h1>
-        <p className="text-gray-500">現在のプランと利用状況</p>
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">プラン・課金</h1>
+        <p className="text-sm sm:text-base text-gray-500">現在のプランと利用状況</p>
       </div>
 
       {/* Success/Cancel Messages */}
       {success && (
-        <Alert className="mb-6 border-green-200 bg-green-50">
+        <Alert className="mb-4 sm:mb-6 border-green-200 bg-green-50">
           <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">
-            アップグレードが完了しました！Standardプランをご利用いただけます。
+          <AlertDescription className="text-sm sm:text-base text-green-800">
+            アップグレード完了！Standardプランをご利用いただけます。
           </AlertDescription>
         </Alert>
       )}
 
       {canceled && (
-        <Alert className="mb-6 border-yellow-200 bg-yellow-50">
+        <Alert className="mb-4 sm:mb-6 border-yellow-200 bg-yellow-50">
           <XCircle className="h-4 w-4 text-yellow-600" />
-          <AlertDescription className="text-yellow-800">
-            アップグレードがキャンセルされました。いつでも再度お申し込みいただけます。
+          <AlertDescription className="text-sm sm:text-base text-yellow-800">
+            キャンセルされました。いつでも再度お申し込みいただけます。
           </AlertDescription>
         </Alert>
       )}
 
       {/* Current Plan */}
-      <Card className="mb-8">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <CardTitle>現在のプラン</CardTitle>
+      <Card className="mb-6 sm:mb-8">
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle className="text-base sm:text-lg">現在のプラン</CardTitle>
             {effectivePlan === 'standard' ? (
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
                 <Crown className="mr-1 h-3 w-3" />
@@ -133,12 +133,12 @@ export function BillingContent({
               <Badge variant="secondary">Free</Badge>
             )}
             {isOnTrial && (
-              <Badge variant="outline" className="border-green-500 text-green-600">
-                トライアル中
+              <Badge variant="outline" className="border-green-500 text-green-600 text-xs">
+                トライアル
               </Badge>
             )}
             {isAdmin && (
-              <Badge variant="outline" className="border-yellow-500 text-yellow-600">
+              <Badge variant="outline" className="border-yellow-500 text-yellow-600 text-xs">
                 管理者
               </Badge>
             )}
@@ -155,20 +155,20 @@ export function BillingContent({
               : '無料プランをご利用中です'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">経験DB:</span> {experienceCount} / {limits.experiences === Infinity ? '無制限' : `${limits.experiences} 枚`}
+        <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
+          <div className="space-y-1.5 sm:space-y-2">
+            <p className="text-xs sm:text-sm text-gray-600">
+              <span className="font-medium">経験DB:</span> {experienceCount} / {limits.experiences === Infinity ? '∞' : limits.experiences}
             </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">ES生成:</span> {monthlyEsCount} / {limits.esGenerationsPerMonth} 回（今月）
+            <p className="text-xs sm:text-sm text-gray-600">
+              <span className="font-medium">ES:</span> {monthlyEsCount} / {limits.esGenerationsPerMonth}回/月
             </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">面接練習:</span> {monthlyInterviewCount} / {limits.interviewSessionsPerMonth} 回（今月）
+            <p className="text-xs sm:text-sm text-gray-600">
+              <span className="font-medium">面接:</span> {monthlyInterviewCount} / {limits.interviewSessionsPerMonth}回/月
             </p>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row flex-wrap gap-2">
             {effectivePlan === 'standard' && !isAdmin && !isOnTrial && (
               <Button
                 variant="outline"
@@ -205,16 +205,16 @@ export function BillingContent({
       </Card>
 
       {/* Plans */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
         <Card className={effectivePlan === 'free' ? 'border-primary' : ''}>
-          <CardHeader>
-            <CardTitle>Free</CardTitle>
-            <CardDescription>就活を始めたばかりの方に</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">Free</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">就活を始めたばかりの方に</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <span className="text-3xl font-bold">¥0</span>
-              <span className="text-gray-500">/月</span>
+          <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
+            <div className="mb-3 sm:mb-4">
+              <span className="text-2xl sm:text-3xl font-bold">¥0</span>
+              <span className="text-gray-500 text-sm">/月</span>
             </div>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm">
@@ -237,17 +237,17 @@ export function BillingContent({
         </Card>
 
         <Card className={effectivePlan === 'standard' ? 'border-primary ring-2 ring-primary' : ''}>
-          <CardHeader>
+          <CardHeader className="p-4 sm:p-6">
             <div className="flex items-center gap-2">
-              <CardTitle>Standard</CardTitle>
-              <Badge>おすすめ</Badge>
+              <CardTitle className="text-base sm:text-lg">Standard</CardTitle>
+              <Badge className="text-xs">おすすめ</Badge>
             </div>
-            <CardDescription>本格的に就活を進める方に</CardDescription>
+            <CardDescription className="text-xs sm:text-sm">本格的に就活を進める方に</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <span className="text-3xl font-bold">¥1,980</span>
-              <span className="text-gray-500">/月</span>
+          <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
+            <div className="mb-3 sm:mb-4">
+              <span className="text-2xl sm:text-3xl font-bold">¥1,980</span>
+              <span className="text-gray-500 text-sm">/月</span>
             </div>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm">

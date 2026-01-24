@@ -93,10 +93,10 @@ export function DashboardContent({
   const issueCount = checkResult?.issues?.length || 0
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">ダッシュボード</h1>
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">ダッシュボード</h1>
           {effectivePlan === 'standard' && (
             <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
               <Crown className="mr-1 h-3 w-3" />
@@ -109,14 +109,14 @@ export function DashboardContent({
             </Badge>
           )}
         </div>
-        <p className="text-gray-500">
+        <p className="text-sm sm:text-base text-gray-500 mt-1">
           {user?.firstName ? `${user.firstName}さん、` : ''}就活の進捗状況を確認しましょう
         </p>
       </div>
 
       {/* Trial Banner */}
       {onTrial && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <TrialBanner
             trialEndsAt={trialEndsAt}
             hasCompletedFeedback={hasCompletedFeedback}
@@ -125,61 +125,60 @@ export function DashboardContent({
       )}
 
       {/* Stats Cards */}
-      <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 sm:mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">経験DB</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">経験DB</CardTitle>
+            <BookOpen className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-3 sm:p-6 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">
               {experienceCount} / {limits.experiences === Infinity ? '∞' : limits.experiences}
             </div>
             {limits.experiences !== Infinity && (
               <Progress
                 value={(experienceCount / limits.experiences) * 100}
-                className="mt-2 h-2"
+                className="mt-2 h-1.5 sm:h-2"
               />
             )}
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 hidden sm:block">
               {effectivePlan === 'standard' ? 'Standard: 無制限' : 'Freeプラン上限'}
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ES作成</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">ES作成</CardTitle>
+            <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{esCount} / {limits.esGenerationsPerMonth}</div>
+          <CardContent className="p-3 sm:p-6 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{esCount} / {limits.esGenerationsPerMonth}</div>
             <Progress
               value={(esCount / limits.esGenerationsPerMonth) * 100}
-              className="mt-2 h-2"
+              className="mt-2 h-1.5 sm:h-2"
             />
-            <p className="text-xs text-muted-foreground mt-1">今月の使用回数</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 hidden sm:block">今月の使用回数</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">面接練習</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">面接練習</CardTitle>
+            <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{interviewCount} / {limits.interviewSessionsPerMonth}</div>
+          <CardContent className="p-3 sm:p-6 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{interviewCount} / {limits.interviewSessionsPerMonth}</div>
             <Progress
               value={(interviewCount / limits.interviewSessionsPerMonth) * 100}
-              className="mt-2 h-2"
+              className="mt-2 h-1.5 sm:h-2"
             />
-            <div className="flex items-center justify-between mt-2">
-              <p className="text-xs text-muted-foreground">今月の使用回数</p>
+            <div className="flex items-center justify-between mt-1 sm:mt-2">
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">今月の使用回数</p>
               {averageRating !== null && (
-                <div className="flex items-center gap-1 text-xs">
-                  <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                <div className="flex items-center gap-1 text-[10px] sm:text-xs">
+                  <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-yellow-500 fill-yellow-500" />
                   <span className="font-medium">{averageRating.toFixed(1)}</span>
-                  <span className="text-muted-foreground">平均</span>
                 </div>
               )}
             </div>
@@ -187,24 +186,24 @@ export function DashboardContent({
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">整合性</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-6 pb-1 sm:pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">整合性</CardTitle>
+            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 sm:p-6 pt-0">
             {checkResult ? (
               <>
-                <div className={`text-2xl font-bold ${hasIssues ? 'text-yellow-600' : 'text-green-600'}`}>
-                  {hasIssues ? `${issueCount}件の指摘` : '良好'}
+                <div className={`text-lg sm:text-2xl font-bold ${hasIssues ? 'text-yellow-600' : 'text-green-600'}`}>
+                  {hasIssues ? `${issueCount}件` : '良好'}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  {lastCheckedAt ? `最終チェック: ${new Date(lastCheckedAt).toLocaleDateString('ja-JP')}` : ''}
+                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
+                  {lastCheckedAt ? `${new Date(lastCheckedAt).toLocaleDateString('ja-JP')}` : ''}
                 </p>
               </>
             ) : (
               <>
-                <div className="text-2xl font-bold text-gray-400">未チェック</div>
-                <p className="text-xs text-muted-foreground">チェックを実行してください</p>
+                <div className="text-lg sm:text-2xl font-bold text-gray-400">未確認</div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">要チェック</p>
               </>
             )}
           </CardContent>
@@ -212,14 +211,15 @@ export function DashboardContent({
       </div>
 
       {/* Consistency Check Section */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">整合性チェック</h2>
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
+          <h2 className="text-base sm:text-lg font-semibold">整合性チェック</h2>
           <Button
             variant="outline"
             size="sm"
             onClick={handleRunCheck}
             disabled={isPending || experienceCount === 0}
+            className="w-full sm:w-auto"
           >
             {isPending ? (
               <>
@@ -296,8 +296,8 @@ export function DashboardContent({
       </div>
 
       {/* Quick Actions */}
-      <div className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">今日のおすすめタスク</h2>
+      <div className="mb-6 sm:mb-8">
+        <h2 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold">今日のおすすめタスク</h2>
         {experienceCount === 0 ? (
           <Card>
             <CardHeader>
@@ -323,15 +323,15 @@ export function DashboardContent({
                 3つ以上の経験を登録すると、より効果的なES作成や面接対策ができます。現在{experienceCount}件の経験が登録されています。
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex gap-2">
-              <Link href="/experiences/new">
-                <Button>
+            <CardContent className="flex flex-col sm:flex-row gap-2">
+              <Link href="/experiences/new" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto">
                   <Plus className="mr-2 h-4 w-4" />
                   経験を追加
                 </Button>
               </Link>
-              <Link href="/experiences">
-                <Button variant="outline">
+              <Link href="/experiences" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto">
                   一覧を見る
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -346,15 +346,15 @@ export function DashboardContent({
                 {experienceCount}件の経験が登録されています。AIを使って、あなたの経験をもとにESを自動生成してみましょう。
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex gap-2">
-              <Link href="/es/new">
-                <Button>
+            <CardContent className="flex flex-col sm:flex-row gap-2">
+              <Link href="/es/new" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto">
                   <FileText className="mr-2 h-4 w-4" />
                   ES作成を始める
                 </Button>
               </Link>
-              <Link href="/experiences">
-                <Button variant="outline">
+              <Link href="/experiences" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto">
                   経験を編集
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -366,7 +366,7 @@ export function DashboardContent({
 
       {/* Recent Activity */}
       {(recentInterviews.length > 0 || recentEs.length > 0) && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           {/* Recent Interviews */}
           {recentInterviews.length > 0 && (
             <Card>

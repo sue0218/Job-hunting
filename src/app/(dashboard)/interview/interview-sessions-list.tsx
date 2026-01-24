@@ -45,19 +45,19 @@ export function InterviewSessionsList({ initialSessions, monthlyCount, trialEnds
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">面接練習</h1>
-          <p className="text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">面接練習</h1>
+          <p className="text-sm sm:text-base text-gray-500">
             AIと面接練習 ・{' '}
             <span className={isLimitReached ? 'text-red-500 font-medium' : ''}>
               今月 {monthlyCount} / {limits.interviewSessionsPerMonth} 回
             </span>
           </p>
         </div>
-        <Link href="/interview/new">
-          <Button disabled={isLimitReached || isPending}>
+        <Link href="/interview/new" className="w-full sm:w-auto">
+          <Button disabled={isLimitReached || isPending} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             セッション開始
           </Button>
@@ -65,14 +65,14 @@ export function InterviewSessionsList({ initialSessions, monthlyCount, trialEnds
       </div>
 
       {isLimitReached && (
-        <Card className="mb-6 border-yellow-200 bg-yellow-50">
-          <CardContent className="pt-6">
-            <p className="text-yellow-800">
-              Freeプランの今月の上限（{limits.interviewSessionsPerMonth}回）に達しました。
-              <Link href="/billing" className="ml-2 underline font-medium">
-                Standardプランにアップグレード
+        <Card className="mb-4 sm:mb-6 border-yellow-200 bg-yellow-50">
+          <CardContent className="p-4 sm:pt-6">
+            <p className="text-sm sm:text-base text-yellow-800">
+              今月の上限（{limits.interviewSessionsPerMonth}回）に達しました。
+              <Link href="/billing" className="ml-1 sm:ml-2 underline font-medium">
+                アップグレード
               </Link>
-              すると月60回まで練習できます。
+              で月60回まで。
             </p>
           </CardContent>
         </Card>
@@ -80,9 +80,9 @@ export function InterviewSessionsList({ initialSessions, monthlyCount, trialEnds
 
       {/* Session History */}
       {sessions.length > 0 ? (
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">セッション履歴</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-base sm:text-lg font-semibold">セッション履歴</h2>
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {sessions.map((session) => (
               <Card key={session.id} className="group hover:shadow-md transition-shadow">
                 <CardHeader className="pb-2">

@@ -17,9 +17,13 @@ export default async function DashboardPage() {
     getUserEntitlement(),
   ])
 
-  // Show onboarding for new users who haven't completed it
-  // and don't have any experiences yet
-  const showOnboarding = !user.onboardingCompleted && experiences.length === 0
+  // Show onboarding only for truly new users
+  // Don't show if they've already used the app (have experiences, ES, or completed feedback)
+  const hasUsedApp = experiences.length > 0 || 
+                     esDocuments.length > 0 || 
+                     interviewSessions.length > 0 ||
+                     entitlement?.surveyCompletedAt
+  const showOnboarding = !user.onboardingCompleted && !hasUsedApp
 
   // Calculate interview stats
   const completedInterviews = interviewSessions.filter(s => s.status === 'completed')

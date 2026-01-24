@@ -19,6 +19,7 @@ import {
   Sparkles,
   Target,
   Zap,
+  X,
 } from 'lucide-react'
 import { completeOnboarding } from '@/lib/actions/user'
 
@@ -66,8 +67,21 @@ export function OnboardingModal({ defaultOpen = true }: OnboardingModalProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
         className="max-w-2xl p-0 overflow-hidden"
-        showCloseButton={false}
+        onInteractOutside={(e) => {
+          // Allow closing by clicking outside
+          e.preventDefault()
+          handleSkip()
+        }}
       >
+        {/* Close Button */}
+        <button
+          onClick={handleSkip}
+          className="absolute right-4 top-4 p-1 rounded-full hover:bg-slate-100 transition-colors z-10"
+          aria-label="閉じる"
+        >
+          <X className="h-5 w-5 text-muted-foreground" />
+        </button>
+
         {/* Progress Bar */}
         <div className="px-6 pt-6">
           <div className="flex items-center justify-between mb-2 text-sm text-muted-foreground">

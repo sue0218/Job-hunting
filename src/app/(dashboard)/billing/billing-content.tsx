@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Check, Crown, Loader2, ExternalLink, CheckCircle, XCircle } from 'lucide-react'
-import { isAdminEmail, getEffectivePlan, getPlanLimits } from '@/lib/config/admin'
-import { createCheckoutSession, createPortalSession } from '@/lib/stripe/actions'
+import { Check, Crown, Loader2, ExternalLink, CheckCircle, XCircle, RefreshCw } from 'lucide-react'
+import { isAdminEmail, getEffectivePlan, getPlanLimits, getRemainingTrialDays } from '@/lib/config/admin'
+import { createCheckoutSession, createPortalSession, syncSubscriptionFromStripe } from '@/lib/stripe/actions'
 
 interface BillingContentProps {
   subscription: {
@@ -20,6 +20,7 @@ interface BillingContentProps {
   experienceCount: number
   monthlyEsCount: number
   monthlyInterviewCount: number
+  trialEndsAt: Date | null
 }
 
 export function BillingContent({
@@ -27,6 +28,7 @@ export function BillingContent({
   experienceCount,
   monthlyEsCount,
   monthlyInterviewCount,
+  trialEndsAt,
 }: BillingContentProps) {
   const { user, isLoaded } = useUser()
   const searchParams = useSearchParams()
@@ -36,9 +38,11 @@ export function BillingContent({
   const canceled = searchParams.get('canceled')
 
   const email = user?.primaryEmailAddress?.emailAddress
-  const effectivePlan = getEffectivePlan(email)
+  const effectivePlan = getEffectivePlan(email, subscription.plan, trialEndsAt)
   const isAdmin = isAdminEmail(email)
-  const limits = getPlanLimits(email)
+  const limits = getPlanLimits(email, subscription.plan, trialEndsAt)
+  const remainingTrialDays = getRemainingTrialDays(trialEndsAt)
+  const isOnTrial = remainingTrialDays !== null && remainingTrialDays > 0 && subscription.plan === 'free'
 
   const handleUpgrade = () => {
     startTransition(async () => {
@@ -58,6 +62,22 @@ export function BillingContent({
         window.location.href = result.url
       } else {
         alert(result.error || 'サブスクリプション管理画面を開けませんでした')
+      }
+    })
+  }
+
+  const handleSyncSubscription = () => {
+    startTransition(async () => {
+      const result = await syncSubscriptionFromStripe()
+      if (result.success) {
+        if (result.plan === 'standard') {
+          alert('サブスクリプション情報を同期しました。ページを再読み込みします。')
+          window.location.reload()
+        } else {
+          alert(result.message)
+        }
+      } else {
+        alert('同期に失敗しました: ' + result.message)
       }
     })
   }
@@ -112,6 +132,11 @@ export function BillingContent({
             ) : (
               <Badge variant="secondary">Free</Badge>
             )}
+            {isOnTrial && (
+              <Badge variant="outline" className="border-green-500 text-green-600">
+                トライアル中
+              </Badge>
+            )}
             {isAdmin && (
               <Badge variant="outline" className="border-yellow-500 text-yellow-600">
                 管理者
@@ -122,9 +147,11 @@ export function BillingContent({
             {effectivePlan === 'standard'
               ? isAdmin
                 ? '管理者として全機能をご利用いただけます'
-                : subscription.currentPeriodEnd
-                  ? `次回更新日: ${new Date(subscription.currentPeriodEnd).toLocaleDateString('ja-JP')}`
-                  : 'Standardプランをご利用中です'
+                : isOnTrial
+                  ? `トライアル期間中（残り${remainingTrialDays}日）`
+                  : subscription.currentPeriodEnd
+                    ? `次回更新日: ${new Date(subscription.currentPeriodEnd).toLocaleDateString('ja-JP')}`
+                    : 'Standardプランをご利用中です'
               : '無料プランをご利用中です'}
           </CardDescription>
         </CardHeader>
@@ -141,21 +168,39 @@ export function BillingContent({
             </p>
           </div>
 
-          {effectivePlan === 'standard' && !isAdmin && (
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={handleManageSubscription}
-              disabled={isPending}
-            >
-              {isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <ExternalLink className="mr-2 h-4 w-4" />
-              )}
-              サブスクリプション管理
-            </Button>
-          )}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {effectivePlan === 'standard' && !isAdmin && !isOnTrial && (
+              <Button
+                variant="outline"
+                onClick={handleManageSubscription}
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                )}
+                サブスクリプション管理
+              </Button>
+            )}
+            {/* Sync button for users who might have webhook issues */}
+            {effectivePlan === 'free' && !isAdmin && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSyncSubscription}
+                disabled={isPending}
+                className="text-muted-foreground"
+              >
+                {isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                )}
+                課金状態を同期
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
 

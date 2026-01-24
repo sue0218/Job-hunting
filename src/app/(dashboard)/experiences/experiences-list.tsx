@@ -14,17 +14,19 @@ import type { Experience } from '@/lib/db/schema'
 
 interface ExperiencesListProps {
   initialExperiences: Experience[]
+  trialEndsAt: Date | null
+  dbPlan: 'free' | 'standard'
 }
 
-export function ExperiencesList({ initialExperiences }: ExperiencesListProps) {
+export function ExperiencesList({ initialExperiences, trialEndsAt, dbPlan }: ExperiencesListProps) {
   const { user } = useUser()
   const [experiences, setExperiences] = useState(initialExperiences)
   const [searchQuery, setSearchQuery] = useState('')
   const [isPending, startTransition] = useTransition()
 
   const email = user?.primaryEmailAddress?.emailAddress
-  const effectivePlan = getEffectivePlan(email)
-  const limits = getPlanLimits(email)
+  const effectivePlan = getEffectivePlan(email, dbPlan, trialEndsAt)
+  const limits = getPlanLimits(email, dbPlan, trialEndsAt)
   const isLimitReached = effectivePlan === 'free' && experiences.length >= limits.experiences
 
   const handleDelete = async (id: string) => {

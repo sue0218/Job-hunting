@@ -2,13 +2,30 @@
 
 import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
 import { db } from '@/lib/db/client'
-import { users } from '@/lib/db/schema'
+import { users, userEntitlements } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { stripe, isStripeConfigured } from '@/lib/stripe/config'
 import { logger } from '@/lib/logger'
 import { revalidatePath } from 'next/cache'
+import { initializeUserEntitlement, checkAndEnrollBeta } from './beta'
+import { bindReferral } from './referral'
+import { trackEvent } from '@/lib/events'
 
-export async function getOrCreateUser() {
+export type UserWithEntitlement = {
+  id: string
+  clerkId: string
+  email: string
+  name: string | null
+  plan: 'free' | 'standard'
+  stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
+  onboardingCompleted: boolean
+  createdAt: Date
+  updatedAt: Date
+  trialEndsAt: Date | null
+}
+
+export async function getOrCreateUser(): Promise<UserWithEntitlement> {
   const { userId: clerkId } = await auth()
 
   if (!clerkId) {
@@ -21,7 +38,15 @@ export async function getOrCreateUser() {
   })
 
   if (existing) {
-    return existing
+    // Also get entitlement for trialEndsAt
+    const entitlement = await db.query.userEntitlements.findFirst({
+      where: eq(userEntitlements.clerkId, clerkId),
+    })
+    return {
+      ...existing,
+      plan: existing.plan as 'free' | 'standard',
+      trialEndsAt: entitlement?.trialEndsAt ?? null,
+    }
   }
 
   // Create new user
@@ -37,7 +62,35 @@ export async function getOrCreateUser() {
     name,
   }).returning()
 
-  return newUser
+  // Initialize user entitlement (invite code, etc.)
+  await initializeUserEntitlement(clerkId)
+
+  // Track signup event
+  await trackEvent('user_signup', clerkId, { email })
+
+  // Bind referral if invite code cookie exists
+  const referralResult = await bindReferral()
+  if (referralResult.success && referralResult.inviterCode) {
+    logger.info('New user referred by', { clerkId, inviterCode: referralResult.inviterCode })
+  }
+
+  // Auto-enroll in beta if slots available
+  const betaResult = await checkAndEnrollBeta()
+  if (betaResult.enrolled) {
+    logger.info('New user auto-enrolled in beta', { clerkId })
+    await trackEvent('beta_enrolled', clerkId, { source: 'auto_enroll' })
+  }
+
+  // Get entitlement for trialEndsAt (might have been set by beta enrollment)
+  const entitlement = await db.query.userEntitlements.findFirst({
+    where: eq(userEntitlements.clerkId, clerkId),
+  })
+
+  return {
+    ...newUser,
+    plan: newUser.plan as 'free' | 'standard',
+    trialEndsAt: entitlement?.trialEndsAt ?? null,
+  }
 }
 
 export async function getCurrentUserId(): Promise<string> {
@@ -97,5 +150,25 @@ export async function deleteAccount(): Promise<{ success: boolean; error?: strin
   } catch (error) {
     logger.error('Failed to delete account', error)
     return { success: false, error: 'アカウントの削除に失敗しました' }
+  }
+}
+
+export async function completeOnboarding(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { userId: clerkId } = await auth()
+    if (!clerkId) {
+      return { success: false, error: 'Not authenticated' }
+    }
+
+    await db
+      .update(users)
+      .set({ onboardingCompleted: true, updatedAt: new Date() })
+      .where(eq(users.clerkId, clerkId))
+
+    revalidatePath('/dashboard')
+    return { success: true }
+  } catch (error) {
+    logger.error('Failed to complete onboarding', error)
+    return { success: false, error: 'オンボーディングの完了に失敗しました' }
   }
 }

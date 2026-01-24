@@ -13,6 +13,9 @@ import {
   type UpdateEsDocumentInput,
 } from '@/lib/validations'
 import { enforceQuotaForUser } from '@/lib/quota/service'
+import { checkAndQualifyReferral } from './referral'
+import { trackEvent } from '@/lib/events'
+import { auth } from '@clerk/nextjs/server'
 
 export async function getEsDocuments(): Promise<EsDocument[]> {
   const userId = await getCurrentUserId()
@@ -49,7 +52,7 @@ export async function createEsDocument(data: CreateEsDocumentInput): Promise<EsD
 
   // Get user and check quota before creating
   const user = await getOrCreateUser()
-  await enforceQuotaForUser(user.id, user.email, user.plan, 'es_generation')
+  await enforceQuotaForUser(user.id, user.email, user.plan, 'es_generation', user.trialEndsAt)
 
   const userId = user.id
 
@@ -57,6 +60,14 @@ export async function createEsDocument(data: CreateEsDocumentInput): Promise<EsD
     ...validated,
     userId,
   }).returning()
+
+  // Track event and check referral milestone
+  const { userId: clerkId } = await auth()
+  if (clerkId) {
+    await trackEvent('es_generated', clerkId, { esId: created.id })
+    // Check if referral milestone is now met (experience + ES)
+    await checkAndQualifyReferral(clerkId)
+  }
 
   revalidatePath('/es')
   return created

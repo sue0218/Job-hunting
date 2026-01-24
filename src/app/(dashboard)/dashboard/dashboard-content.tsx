@@ -8,9 +8,10 @@ import { Progress } from '@/components/ui/progress'
 import { BookOpen, FileText, MessageSquare, TrendingUp, Crown, Plus, ArrowRight, AlertTriangle, CheckCircle, Loader2, RefreshCw, Star, Clock, Building2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { isAdminEmail, getEffectivePlan, getPlanLimits } from '@/lib/config/admin'
+import { isAdminEmail, getEffectivePlan, getPlanLimits, isOnTrial } from '@/lib/config/admin'
 import { runConsistencyCheck } from '@/lib/actions/consistency-checks'
 import type { ConsistencyCheckResult } from '@/lib/llm/consistency-service'
+import { TrialBanner } from '@/components/trial'
 
 interface RecentInterview {
   id: string
@@ -40,6 +41,9 @@ interface DashboardContentProps {
   completedInterviewCount: number
   recentInterviews: RecentInterview[]
   recentEs: RecentEs[]
+  trialEndsAt: Date | null
+  hasCompletedFeedback: boolean
+  dbPlan: 'free' | 'standard'
 }
 
 export function DashboardContent({
@@ -51,6 +55,9 @@ export function DashboardContent({
   completedInterviewCount,
   recentInterviews,
   recentEs,
+  trialEndsAt,
+  hasCompletedFeedback,
+  dbPlan,
 }: DashboardContentProps) {
   const { user, isLoaded } = useUser()
   const [isPending, startTransition] = useTransition()
@@ -58,9 +65,10 @@ export function DashboardContent({
   const [lastCheckedAt, setLastCheckedAt] = useState(consistencyCheck.checkedAt)
 
   const email = user?.primaryEmailAddress?.emailAddress
-  const effectivePlan = getEffectivePlan(email)
+  const effectivePlan = getEffectivePlan(email, dbPlan, trialEndsAt)
   const isAdmin = isAdminEmail(email)
-  const limits = getPlanLimits(email)
+  const limits = getPlanLimits(email, dbPlan, trialEndsAt)
+  const onTrial = isOnTrial(trialEndsAt)
 
   const handleRunCheck = () => {
     startTransition(async () => {
@@ -105,6 +113,16 @@ export function DashboardContent({
           {user?.firstName ? `${user.firstName}さん、` : ''}就活の進捗状況を確認しましょう
         </p>
       </div>
+
+      {/* Trial Banner */}
+      {onTrial && (
+        <div className="mb-6">
+          <TrialBanner
+            trialEndsAt={trialEndsAt}
+            hasCompletedFeedback={hasCompletedFeedback}
+          />
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

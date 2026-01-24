@@ -7,6 +7,8 @@ import {
   integer,
   jsonb,
   date,
+  uniqueIndex,
+  index,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
@@ -19,6 +21,7 @@ export const users = pgTable('users', {
   plan: text('plan').default('free').notNull(), // free, standard
   stripeCustomerId: text('stripe_customer_id'),
   stripeSubscriptionId: text('stripe_subscription_id'),
+  onboardingCompleted: boolean('onboarding_completed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -153,6 +156,75 @@ export const featureFlags = pgTable('feature_flags', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
+// ========================================
+// Beta Campaign & Rewards System Tables
+// ========================================
+
+// User Entitlements table (権限・トライアル管理)
+export const userEntitlements = pgTable('user_entitlements', {
+  clerkId: text('clerk_id').primaryKey(), // Clerk user ID
+  trialEndsAt: timestamp('trial_ends_at'), // トライアル終了日時
+  trialSource: text('trial_source'), // 'beta' | 'referral' | 'survey' | 'manual'
+  inviteCode: text('invite_code').unique().notNull(), // 8桁ランダム
+  invitedByCode: text('invited_by_code'), // 誰の紹介で来たか
+  surveyCompletedAt: timestamp('survey_completed_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// Beta Campaigns table (キャンペーン設定)
+export const betaCampaigns = pgTable('beta_campaigns', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  key: text('key').unique().notNull(), // 'beta_standard_300_30d'
+  enabled: boolean('enabled').default(true).notNull(),
+  maxSlots: integer('max_slots').notNull(), // 300
+  claimedSlots: integer('claimed_slots').default(0).notNull(),
+  startsAt: timestamp('starts_at'),
+  endsAt: timestamp('ends_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// Rewards Ledger table (報酬台帳 - 冪等性の要)
+export const rewardsLedger = pgTable('rewards_ledger', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clerkId: text('clerk_id').notNull(), // Clerk user ID
+  rewardType: text('reward_type').notNull(), // 'beta_enroll' | 'survey_bonus' | 'referral_bonus'
+  sourceId: text('source_id').notNull(), // campaign_key / feedback_id / referred_clerk_id
+  days: integer('days').notNull(), // 30 / 7
+  grantedAt: timestamp('granted_at').defaultNow().notNull(),
+  notes: text('notes'),
+}, (table) => [
+  // 重複付与防止のユニーク制約
+  uniqueIndex('rewards_ledger_unique_idx').on(table.clerkId, table.rewardType, table.sourceId),
+  index('rewards_ledger_clerk_id_idx').on(table.clerkId),
+])
+
+// Referrals table (紹介管理)
+export const referrals = pgTable('referrals', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  inviterClerkId: text('inviter_clerk_id').notNull(), // 紹介者のClerk ID
+  inviteCode: text('invite_code').notNull(), // 使用された招待コード
+  referredClerkId: text('referred_clerk_id').unique(), // 被紹介者は1回まで
+  status: text('status').default('pending').notNull(), // 'pending' | 'qualified' | 'rewarded' | 'blocked'
+  qualifiedAt: timestamp('qualified_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => [
+  index('referrals_inviter_idx').on(table.inviterClerkId),
+  index('referrals_invite_code_idx').on(table.inviteCode),
+])
+
+// Feedback Submissions table (アンケート回答)
+export const feedbackSubmissions = pgTable('feedback_submissions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clerkId: text('clerk_id').notNull(), // Clerk user ID
+  nps: integer('nps'), // 0-10
+  satisfaction: integer('satisfaction'), // 1-5
+  bestFeature: text('best_feature'), // 最も良い機能
+  goodText: text('good_text'), // 良かった点
+  improveText: text('improve_text'), // 改善してほしい点
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   experiences: many(experiences),
@@ -196,3 +268,13 @@ export type EventLog = typeof eventLogs.$inferSelect
 export type NewEventLog = typeof eventLogs.$inferInsert
 export type FeatureFlag = typeof featureFlags.$inferSelect
 export type NewFeatureFlag = typeof featureFlags.$inferInsert
+export type UserEntitlement = typeof userEntitlements.$inferSelect
+export type NewUserEntitlement = typeof userEntitlements.$inferInsert
+export type BetaCampaign = typeof betaCampaigns.$inferSelect
+export type NewBetaCampaign = typeof betaCampaigns.$inferInsert
+export type RewardLedger = typeof rewardsLedger.$inferSelect
+export type NewRewardLedger = typeof rewardsLedger.$inferInsert
+export type Referral = typeof referrals.$inferSelect
+export type NewReferral = typeof referrals.$inferInsert
+export type FeedbackSubmission = typeof feedbackSubmissions.$inferSelect
+export type NewFeedbackSubmission = typeof feedbackSubmissions.$inferInsert

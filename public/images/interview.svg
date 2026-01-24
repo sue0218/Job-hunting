@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Video call frame -->
+  <rect x="50" y="30" width="300" height="200" rx="12" fill="#1e293b"/>
+  <rect x="60" y="40" width="280" height="170" rx="8" fill="#0f172a"/>
+
+  <!-- Interviewer on screen -->
+  <g transform="translate(100, 70)">
+    <!-- Body -->
+    <rect x="30" y="80" width="60" height="50" rx="4" fill="#475569"/>
+    <!-- Head -->
+    <circle cx="60" cy="50" r="30" fill="#fcd9b6"/>
+    <!-- Hair -->
+    <ellipse cx="60" cy="30" rx="32" ry="20" fill="#64748b"/>
+    <!-- Professional face -->
+    <circle cx="50" cy="48" r="3" fill="#1e293b"/>
+    <circle cx="70" cy="48" r="3" fill="#1e293b"/>
+    <!-- Glasses -->
+    <rect x="43" y="43" width="14" height="10" rx="2" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <rect x="63" y="43" width="14" height="10" rx="2" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <line x1="57" y1="48" x2="63" y2="48" stroke="#1e293b" stroke-width="2"/>
+    <!-- Slight smile -->
+    <path d="M52 65 Q60 70 68 65" stroke="#1e293b" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- Speech bubble from interviewer -->
+  <g transform="translate(200, 60)">
+    <rect x="0" y="0" width="120" height="50" rx="8" fill="#3b82f6"/>
+    <polygon points="0,25 -15,35 0,35" fill="#3b82f6"/>
+    <rect x="12" y="12" width="60" height="5" rx="2" fill="#fff" opacity="0.9"/>
+    <rect x="12" y="22" width="96" height="4" rx="2" fill="#fff" opacity="0.7"/>
+    <rect x="12" y="30" width="80" height="4" rx="2" fill="#fff" opacity="0.7"/>
+  </g>
+
+  <!-- Webcam indicator -->
+  <circle cx="200" cy="50" r="5" fill="#ef4444"/>
+
+  <!-- User (candidate) -->
+  <g transform="translate(140, 240)">
+    <!-- Body -->
+    <ellipse cx="60" cy="40" rx="35" ry="25" fill="#3b82f6"/>
+    <!-- Head (back view, slight angle) -->
+    <circle cx="60" cy="0" r="28" fill="#fcd9b6"/>
+    <!-- Hair -->
+    <ellipse cx="60" cy="-12" rx="30" ry="20" fill="#1e293b"/>
+    <!-- Laptop -->
+    <rect x="20" y="55" width="80" height="5" rx="2" fill="#475569"/>
+    <rect x="30" y="25" width="60" height="35" rx="4" fill="#1e293b"/>
+    <rect x="35" y="30" width="50" height="25" rx="2" fill="#0f172a"/>
+  </g>
+
+  <!-- Confidence indicator -->
+  <g transform="translate(320, 240)">
+    <circle cx="25" cy="25" r="22" fill="#10b981" opacity="0.2"/>
+    <circle cx="25" cy="25" r="18" fill="#10b981" opacity="0.3"/>
+    <circle cx="25" cy="25" r="14" fill="#10b981"/>
+    <path d="M18 25 L23 30 L32 21" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Notes/preparation -->
+  <g transform="translate(30, 240)">
+    <rect x="0" y="0" width="50" height="60" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="8" y="10" width="25" height="4" rx="2" fill="#3b82f6"/>
+    <rect x="8" y="18" width="34" height="3" rx="1.5" fill="#e2e8f0"/>
+    <rect x="8" y="24" width="30" height="3" rx="1.5" fill="#e2e8f0"/>
+    <rect x="8" y="30" width="34" height="3" rx="1.5" fill="#e2e8f0"/>
+    <rect x="8" y="40" width="25" height="4" rx="2" fill="#10b981"/>
+    <rect x="8" y="48" width="30" height="3" rx="1.5" fill="#e2e8f0"/>
+  </g>
+</svg>

@@ -2,15 +2,24 @@ import { getExperiences } from '@/lib/actions/experiences'
 import { getEsDocuments } from '@/lib/actions/es-documents'
 import { getInterviewSessions } from '@/lib/actions/interview-sessions'
 import { getLatestConsistencyCheck } from '@/lib/actions/consistency-checks'
+import { getOrCreateUser } from '@/lib/actions/user'
+import { getUserEntitlement } from '@/lib/actions/beta'
 import { DashboardContent } from './dashboard-content'
+import { OnboardingModal } from '@/components/onboarding/onboarding-modal'
 
 export default async function DashboardPage() {
-  const [experiences, esDocuments, interviewSessions, consistencyCheck] = await Promise.all([
+  const [user, experiences, esDocuments, interviewSessions, consistencyCheck, entitlement] = await Promise.all([
+    getOrCreateUser(),
     getExperiences(),
     getEsDocuments(),
     getInterviewSessions(),
     getLatestConsistencyCheck(),
+    getUserEntitlement(),
   ])
+
+  // Show onboarding for new users who haven't completed it
+  // and don't have any experiences yet
+  const showOnboarding = !user.onboardingCompleted && experiences.length === 0
 
   // Calculate interview stats
   const completedInterviews = interviewSessions.filter(s => s.status === 'completed')
@@ -37,27 +46,33 @@ export default async function DashboardPage() {
   ).length
 
   return (
-    <DashboardContent
-      experienceCount={experiences.length}
-      esCount={monthlyEsCount}
-      interviewCount={monthlyInterviewCount}
-      consistencyCheck={consistencyCheck}
-      averageRating={averageRating}
-      completedInterviewCount={completedInterviews.length}
-      recentInterviews={recentInterviews.map(s => ({
-        id: s.id,
-        title: s.title,
-        rating: s.rating,
-        status: s.status,
-        createdAt: s.createdAt,
-      }))}
-      recentEs={recentEs.map(es => ({
-        id: es.id,
-        title: es.title,
-        companyName: es.companyName,
-        status: es.status,
-        createdAt: es.createdAt,
-      }))}
-    />
+    <>
+      {showOnboarding && <OnboardingModal />}
+      <DashboardContent
+        experienceCount={experiences.length}
+        esCount={monthlyEsCount}
+        interviewCount={monthlyInterviewCount}
+        consistencyCheck={consistencyCheck}
+        averageRating={averageRating}
+        completedInterviewCount={completedInterviews.length}
+        recentInterviews={recentInterviews.map(s => ({
+          id: s.id,
+          title: s.title,
+          rating: s.rating,
+          status: s.status,
+          createdAt: s.createdAt,
+        }))}
+        recentEs={recentEs.map(es => ({
+          id: es.id,
+          title: es.title,
+          companyName: es.companyName,
+          status: es.status,
+          createdAt: es.createdAt,
+        }))}
+        trialEndsAt={entitlement?.trialEndsAt ?? null}
+        hasCompletedFeedback={!!entitlement?.surveyCompletedAt}
+        dbPlan={user.plan}
+      />
+    </>
   )
 }

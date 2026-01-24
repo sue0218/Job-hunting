@@ -79,7 +79,7 @@ export async function createInterviewSession(
 
   // Get user and check quota before creating
   const user = await getOrCreateUser()
-  await enforceQuotaForUser(user.id, user.email, user.plan, 'interview_session')
+  await enforceQuotaForUser(user.id, user.email, user.plan, 'interview_session', user.trialEndsAt)
 
   const userId = user.id
 

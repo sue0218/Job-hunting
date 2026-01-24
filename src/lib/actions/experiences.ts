@@ -14,6 +14,9 @@ import {
 } from '@/lib/validations'
 import { enforceQuotaForUser } from '@/lib/quota/service'
 import { QuotaExceededError } from '@/lib/quota/types'
+import { checkAndQualifyReferral } from './referral'
+import { trackEvent } from '@/lib/events'
+import { auth } from '@clerk/nextjs/server'
 
 // Convert YYYY-MM format to YYYY-MM-01 for PostgreSQL date type
 function normalizeDate(dateStr: string | null | undefined): string | null {
@@ -60,7 +63,7 @@ export async function createExperience(data: CreateExperienceInput): Promise<Exp
 
   // Get user and check quota before creating
   const user = await getOrCreateUser()
-  await enforceQuotaForUser(user.id, user.email, user.plan, 'experience')
+  await enforceQuotaForUser(user.id, user.email, user.plan, 'experience', user.trialEndsAt)
 
   const userId = user.id
 
@@ -70,6 +73,14 @@ export async function createExperience(data: CreateExperienceInput): Promise<Exp
     periodEnd: normalizeDate(validated.periodEnd),
     userId,
   }).returning()
+
+  // Track event and check referral milestone
+  const { userId: clerkId } = await auth()
+  if (clerkId) {
+    await trackEvent('experience_created', clerkId, { experienceId: created.id })
+    // Check if referral milestone is now met (experience + ES)
+    await checkAndQualifyReferral(clerkId)
+  }
 
   revalidatePath('/experiences')
   return created

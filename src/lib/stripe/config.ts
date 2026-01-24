@@ -4,7 +4,11 @@ import Stripe from 'stripe'
 // This warning only shows if the module is loaded with incorrect config
 const stripeNotConfigured = !process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_xxxxx'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+// Use a dummy key for build time if not configured
+// This prevents build errors while allowing runtime checks
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder_for_build'
+
+export const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-12-15.clover',
   typescript: true,
 })

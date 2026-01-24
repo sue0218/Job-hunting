@@ -13,16 +13,18 @@ import { deleteInterviewSession, type InterviewSessionWithTurns } from '@/lib/ac
 interface InterviewSessionsListProps {
   initialSessions: InterviewSessionWithTurns[]
   monthlyCount: number
+  trialEndsAt: Date | null
+  dbPlan: 'free' | 'standard'
 }
 
-export function InterviewSessionsList({ initialSessions, monthlyCount }: InterviewSessionsListProps) {
+export function InterviewSessionsList({ initialSessions, monthlyCount, trialEndsAt, dbPlan }: InterviewSessionsListProps) {
   const { user } = useUser()
   const [sessions, setSessions] = useState(initialSessions)
   const [isPending, startTransition] = useTransition()
 
   const email = user?.primaryEmailAddress?.emailAddress
-  const effectivePlan = getEffectivePlan(email)
-  const limits = getPlanLimits(email)
+  const effectivePlan = getEffectivePlan(email, dbPlan, trialEndsAt)
+  const limits = getPlanLimits(email, dbPlan, trialEndsAt)
   const isLimitReached = effectivePlan === 'free' && monthlyCount >= limits.interviewSessionsPerMonth
 
   const handleDelete = (id: string) => {

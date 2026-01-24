@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Scattered papers -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="70" height="90" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" transform="rotate(-15)"/>
+    <rect x="10" y="15" width="35" height="4" rx="2" fill="#ef4444" transform="rotate(-15)"/>
+    <rect x="10" y="25" width="45" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(-15)"/>
+    <rect x="10" y="33" width="40" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(-15)"/>
+  </g>
+
+  <g transform="translate(100, 60)">
+    <rect x="0" y="0" width="70" height="90" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" transform="rotate(8)"/>
+    <rect x="10" y="15" width="30" height="4" rx="2" fill="#f59e0b" transform="rotate(8)"/>
+    <rect x="10" y="25" width="50" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(8)"/>
+    <rect x="10" y="33" width="42" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(8)"/>
+  </g>
+
+  <g transform="translate(280, 70)">
+    <rect x="0" y="0" width="70" height="90" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" transform="rotate(12)"/>
+    <rect x="10" y="15" width="40" height="4" rx="2" fill="#ef4444" transform="rotate(12)"/>
+    <rect x="10" y="25" width="48" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(12)"/>
+    <rect x="10" y="33" width="38" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(12)"/>
+  </g>
+
+  <g transform="translate(240, 100)">
+    <rect x="0" y="0" width="70" height="90" rx="4" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" transform="rotate(-5)"/>
+    <rect x="10" y="15" width="32" height="4" rx="2" fill="#f59e0b" transform="rotate(-5)"/>
+    <rect x="10" y="25" width="45" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(-5)"/>
+    <rect x="10" y="33" width="40" height="3" rx="1.5" fill="#e2e8f0" transform="rotate(-5)"/>
+  </g>
+
+  <!-- Confused person -->
+  <g transform="translate(150, 160)">
+    <!-- Body -->
+    <ellipse cx="50" cy="100" rx="30" ry="40" fill="#94a3b8"/>
+    <!-- Head -->
+    <circle cx="50" cy="40" r="32" fill="#fcd9b6"/>
+    <!-- Hair -->
+    <ellipse cx="50" cy="20" rx="34" ry="22" fill="#1e293b"/>
+    <!-- Confused face -->
+    <circle cx="38" cy="38" r="4" fill="#1e293b"/>
+    <circle cx="62" cy="38" r="4" fill="#1e293b"/>
+    <!-- Confused eyebrows -->
+    <path d="M30 28 L44 32" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M70 28 L56 32" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <!-- Worried mouth -->
+    <path d="M40 55 Q50 50 60 55" stroke="#1e293b" stroke-width="2.5" fill="none"/>
+    <!-- Question marks -->
+    <text x="90" y="20" fill="#ef4444" font-size="28" font-weight="bold">?</text>
+    <text x="0" y="25" fill="#f59e0b" font-size="24" font-weight="bold">?</text>
+    <text x="85" y="55" fill="#94a3b8" font-size="20" font-weight="bold">?</text>
+    <!-- Arms up in confusion -->
+    <path d="M25 80 Q5 60 15 40" stroke="#fcd9b6" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M75 80 Q95 60 85 40" stroke="#fcd9b6" stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Time pressure -->
+  <g transform="translate(320, 180)">
+    <circle cx="30" cy="30" r="28" fill="#fff" stroke="#ef4444" stroke-width="3"/>
+    <line x1="30" y1="30" x2="30" y2="15" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <line x1="30" y1="30" x2="42" y2="35" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="30" cy="30" r="3" fill="#ef4444"/>
+  </g>
+</svg>

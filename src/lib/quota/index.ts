@@ -16,7 +16,7 @@ export { QuotaExceededError, type QuotaType, type QuotaCheckResult } from './typ
  */
 export async function checkQuota(quotaType: QuotaType): Promise<QuotaCheckResult> {
   const user = await getOrCreateUser()
-  return checkQuotaForUser(user.id, user.email, user.plan, quotaType)
+  return checkQuotaForUser(user.id, user.email, user.plan, quotaType, user.trialEndsAt)
 }
 
 /**
@@ -24,7 +24,7 @@ export async function checkQuota(quotaType: QuotaType): Promise<QuotaCheckResult
  */
 export async function enforceQuota(quotaType: QuotaType): Promise<void> {
   const user = await getOrCreateUser()
-  return enforceQuotaForUser(user.id, user.email, user.plan, quotaType)
+  return enforceQuotaForUser(user.id, user.email, user.plan, quotaType, user.trialEndsAt)
 }
 
 /**
@@ -37,5 +37,5 @@ export async function getQuotaStatus(): Promise<{
   interviewSessions: QuotaCheckResult
 }> {
   const user = await getOrCreateUser()
-  return getQuotaStatusForUser(user.id, user.email, user.plan)
+  return getQuotaStatusForUser(user.id, user.email, user.plan, user.trialEndsAt)
 }

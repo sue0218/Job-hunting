@@ -2,14 +2,16 @@ import { getSubscriptionStatus } from '@/lib/stripe/actions'
 import { getExperiences } from '@/lib/actions/experiences'
 import { getEsDocuments } from '@/lib/actions/es-documents'
 import { getInterviewSessions } from '@/lib/actions/interview-sessions'
+import { getUserEntitlement } from '@/lib/actions/beta'
 import { BillingContent } from './billing-content'
 
 export default async function BillingPage() {
-  const [subscription, experiences, esDocuments, interviewSessions] = await Promise.all([
+  const [subscription, experiences, esDocuments, interviewSessions, entitlement] = await Promise.all([
     getSubscriptionStatus(),
     getExperiences(),
     getEsDocuments(),
     getInterviewSessions(),
+    getUserEntitlement(),
   ])
 
   // Count this month's usage
@@ -31,6 +33,7 @@ export default async function BillingPage() {
       experienceCount={experiences.length}
       monthlyEsCount={monthlyEsCount}
       monthlyInterviewCount={monthlyInterviewCount}
+      trialEndsAt={entitlement?.trialEndsAt ?? null}
     />
   )
 }

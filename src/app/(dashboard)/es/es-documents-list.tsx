@@ -14,17 +14,19 @@ import type { EsDocument } from '@/lib/db/schema'
 
 interface EsDocumentsListProps {
   initialDocuments: EsDocument[]
+  trialEndsAt: Date | null
+  dbPlan: 'free' | 'standard'
 }
 
-export function EsDocumentsList({ initialDocuments }: EsDocumentsListProps) {
+export function EsDocumentsList({ initialDocuments, trialEndsAt, dbPlan }: EsDocumentsListProps) {
   const { user } = useUser()
   const [esDocuments, setEsDocuments] = useState(initialDocuments)
   const [searchQuery, setSearchQuery] = useState('')
   const [isPending, startTransition] = useTransition()
 
   const email = user?.primaryEmailAddress?.emailAddress
-  const effectivePlan = getEffectivePlan(email)
-  const limits = getPlanLimits(email)
+  const effectivePlan = getEffectivePlan(email, dbPlan, trialEndsAt)
+  const limits = getPlanLimits(email, dbPlan, trialEndsAt)
 
   // Count this month's ES generations
   const thisMonth = new Date()

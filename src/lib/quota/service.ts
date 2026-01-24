@@ -60,9 +60,10 @@ export async function checkQuotaForUser(
   userId: string,
   email: string,
   dbPlan: string,
-  quotaType: QuotaType
+  quotaType: QuotaType,
+  trialEndsAt?: Date | null
 ): Promise<QuotaCheckResult> {
-  const plan = getEffectivePlan(email, dbPlan)
+  const plan = getEffectivePlan(email, dbPlan, trialEndsAt)
   const limits = PLAN_LIMITS[plan]
   const usage = await getCurrentUsage(userId)
 
@@ -103,9 +104,10 @@ export async function enforceQuotaForUser(
   userId: string,
   email: string,
   dbPlan: string,
-  quotaType: QuotaType
+  quotaType: QuotaType,
+  trialEndsAt?: Date | null
 ): Promise<void> {
-  const result = await checkQuotaForUser(userId, email, dbPlan, quotaType)
+  const result = await checkQuotaForUser(userId, email, dbPlan, quotaType, trialEndsAt)
 
   if (!result.allowed) {
     throw new QuotaExceededError(quotaType, result.current, result.limit)
@@ -118,14 +120,15 @@ export async function enforceQuotaForUser(
 export async function getQuotaStatusForUser(
   userId: string,
   email: string,
-  dbPlan: string
+  dbPlan: string,
+  trialEndsAt?: Date | null
 ): Promise<{
   plan: 'free' | 'standard'
   experiences: QuotaCheckResult
   esGenerations: QuotaCheckResult
   interviewSessions: QuotaCheckResult
 }> {
-  const plan = getEffectivePlan(email, dbPlan)
+  const plan = getEffectivePlan(email, dbPlan, trialEndsAt)
   const limits = PLAN_LIMITS[plan]
   const usage = await getCurrentUsage(userId)
 

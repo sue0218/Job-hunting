@@ -32,11 +32,11 @@ export default async function InvitePage() {
   const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://gakuchika-bank.com'}/invite/${stats.inviteCode}`
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="mx-auto max-w-2xl">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">友達を招待</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">友達を招待</h1>
+          <p className="mt-1 text-sm sm:text-base text-muted-foreground">
             招待した友達がマイルストーンを達成すると、
             <strong className="text-primary">あなたも友達も+7日間</strong>無料期間が延長されます
           </p>
@@ -46,83 +46,83 @@ export default async function InvitePage() {
         <InviteShareCard inviteUrl={inviteUrl} inviteCode={stats.inviteCode} />
 
         {/* Stats */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <div className="mb-6 sm:mb-8 grid grid-cols-3 gap-2 sm:gap-4">
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <Users className="h-4 w-4" />
-                招待した友達
+            <CardHeader className="p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground">
+                <Users className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+                <span className="truncate">招待した友達</span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalReferrals}人</div>
+            <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalReferrals}人</div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <CheckCircle className="h-4 w-4" />
-                達成済み
+            <CardHeader className="p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground">
+                <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+                <span className="truncate">達成済み</span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.rewardedReferrals}人</div>
-              <p className="text-xs text-muted-foreground">+{stats.rewardedReferrals * 7}日獲得</p>
+            <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.rewardedReferrals}人</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">+{stats.rewardedReferrals * 7}日獲得</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <Gift className="h-4 w-4" />
-                残りボーナス枠
+            <CardHeader className="p-3 sm:p-6 pb-1 sm:pb-2">
+              <CardTitle className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground">
+                <Gift className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+                <span className="truncate">残り枠</span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.remainingBonusSlots}人</div>
-              <p className="text-xs text-muted-foreground">最大5人まで</p>
+            <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.remainingBonusSlots}人</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">最大5人</p>
             </CardContent>
           </Card>
         </div>
 
         {/* How it works */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">紹介の仕組み</CardTitle>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">紹介の仕組み</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+          <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex h-6 w-6 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs sm:text-sm font-bold text-white">
                 1
               </div>
-              <div>
-                <p className="font-medium">友達に招待リンクを共有</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="min-w-0">
+                <p className="text-sm sm:text-base font-medium">友達に招待リンクを共有</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   上のボタンからリンクをコピーして、LINEやTwitterで共有
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex h-6 w-6 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs sm:text-sm font-bold text-white">
                 2
               </div>
-              <div>
-                <p className="font-medium">友達が登録して使い始める</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="min-w-0">
+                <p className="text-sm sm:text-base font-medium">友達が登録して使い始める</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   友達がリンクから登録すると、紹介として紐付けられます
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex h-6 w-6 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs sm:text-sm font-bold text-white">
                 3
               </div>
-              <div>
-                <p className="font-medium">マイルストーン達成で+7日</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="min-w-0">
+                <p className="text-sm sm:text-base font-medium">マイルストーン達成で+7日</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   友達が経験1つ + ES1つを作成すると、両者に+7日付与されます
                 </p>
               </div>
@@ -132,11 +132,11 @@ export default async function InvitePage() {
 
         {/* Current trial status */}
         {remainingDays !== null && remainingDays > 0 && (
-          <div className="mt-6 rounded-lg border bg-gradient-to-r from-primary/5 to-blue-50 p-4">
+          <div className="mt-4 sm:mt-6 rounded-lg border bg-gradient-to-r from-primary/5 to-blue-50 p-3 sm:p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              <span className="font-medium">
-                現在の無料期間残り: <strong className="text-primary">{remainingDays}日</strong>
+              <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+              <span className="text-sm sm:text-base font-medium">
+                無料期間残り: <strong className="text-primary">{remainingDays}日</strong>
               </span>
             </div>
           </div>

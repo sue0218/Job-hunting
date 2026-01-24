@@ -45,21 +45,22 @@ export function InviteShareCard({ inviteUrl, inviteCode }: InviteShareCardProps)
   }
 
   return (
-    <Card className="mb-8 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-blue-50">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Share2 className="h-5 w-5 text-primary" />
+    <Card className="mb-6 sm:mb-8 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-blue-50">
+      <CardHeader className="p-4 sm:p-6">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <Share2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           あなたの招待リンク
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex gap-2">
+      <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
+        {/* URL + Copy - スマホでは縦並び */}
+        <div className="flex flex-col sm:flex-row gap-2">
           <Input
             value={inviteUrl}
             readOnly
-            className="bg-white font-mono text-sm"
+            className="bg-white font-mono text-xs sm:text-sm"
           />
-          <Button onClick={handleCopy} variant="outline" className="shrink-0">
+          <Button onClick={handleCopy} variant="outline" className="shrink-0 w-full sm:w-auto">
             {copied ? (
               <>
                 <Check className="mr-2 h-4 w-4 text-green-600" />
@@ -68,25 +69,26 @@ export function InviteShareCard({ inviteUrl, inviteCode }: InviteShareCardProps)
             ) : (
               <>
                 <Copy className="mr-2 h-4 w-4" />
-                コピー
+                リンクをコピー
               </>
             )}
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={handleTwitterShare} variant="outline" className="flex-1 sm:flex-none">
-            <Twitter className="mr-2 h-4 w-4" />
-            X (Twitter)
+        {/* Share buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button onClick={handleTwitterShare} variant="outline" className="w-full">
+            <Twitter className="mr-2 h-4 w-4 shrink-0" />
+            <span className="truncate">Twitter</span>
           </Button>
-          <Button onClick={handleLineShare} variant="outline" className="flex-1 sm:flex-none bg-[#00B900] text-white hover:bg-[#00A000] hover:text-white">
+          <Button onClick={handleLineShare} variant="outline" className="w-full bg-[#00B900] text-white hover:bg-[#00A000] hover:text-white">
             <MessageCircle className="mr-2 h-4 w-4" />
             LINE
           </Button>
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          招待コード: <code className="rounded bg-white px-1.5 py-0.5 font-mono">{inviteCode}</code>
+        <p className="text-[10px] sm:text-xs text-muted-foreground text-center sm:text-left">
+          招待コード: <code className="rounded bg-white px-1 sm:px-1.5 py-0.5 font-mono">{inviteCode}</code>
         </p>
       </CardContent>
     </Card>

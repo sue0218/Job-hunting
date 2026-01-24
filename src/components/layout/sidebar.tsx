@@ -13,7 +13,10 @@ import {
   Settings,
   User,
   Sparkles,
+  Menu,
+  X,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const navigation = [
   { name: 'ダッシュボード', href: '/dashboard', icon: LayoutDashboard },
@@ -59,45 +62,115 @@ function UserAvatar() {
 
 export function Sidebar() {
   const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
 
   return (
-    <div className="flex h-full w-64 flex-col border-r bg-white">
-      <div className="flex h-16 items-center border-b px-6">
+    <>
+      {/* Mobile Header */}
+      <div className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b bg-white px-4 md:hidden">
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
-          <span className="text-lg font-bold text-foreground">ガクチカバンク</span>
+          <span className="text-base font-bold text-foreground">ガクチカバンク</span>
         </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4">
-        {navigation.map((item) => {
-          const isActive = pathname.startsWith(item.href)
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                isActive
-                  ? 'bg-primary text-white shadow-md shadow-primary/25'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-              )}
-            >
-              <item.icon className="h-5 w-5" />
-              {item.name}
-            </Link>
-          )
-        })}
-      </nav>
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
 
-      <div className="border-t p-4">
-        <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
-          <UserAvatar />
-          <span className="text-sm font-medium text-foreground">マイアカウント</span>
+      {/* Mobile Sidebar */}
+      <div
+        className={cn(
+          'fixed top-14 left-0 z-30 h-[calc(100vh-3.5rem)] w-64 transform bg-white transition-transform duration-200 ease-in-out md:hidden',
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
+        <nav className="flex-1 space-y-1 px-3 py-4">
+          {navigation.map((item) => {
+            const isActive = pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                  isActive
+                    ? 'bg-primary text-white shadow-md shadow-primary/25'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                {item.name}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="absolute bottom-0 left-0 right-0 border-t p-4">
+          <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+            <UserAvatar />
+            <span className="text-sm font-medium text-foreground">マイアカウント</span>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden h-full w-64 flex-col border-r bg-white md:flex">
+        <div className="flex h-16 items-center border-b px-6">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <Sparkles className="h-4 w-4 text-white" />
+            </div>
+            <span className="text-lg font-bold text-foreground">ガクチカバンク</span>
+          </Link>
+        </div>
+
+        <nav className="flex-1 space-y-1 px-3 py-4">
+          {navigation.map((item) => {
+            const isActive = pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                  isActive
+                    ? 'bg-primary text-white shadow-md shadow-primary/25'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                {item.name}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="border-t p-4">
+          <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+            <UserAvatar />
+            <span className="text-sm font-medium text-foreground">マイアカウント</span>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

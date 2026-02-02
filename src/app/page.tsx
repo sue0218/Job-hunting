@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { PromoVideo } from '@/components/promo-video'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   FileText,
@@ -145,6 +146,11 @@ export default function LandingPage() {
                 <Shield className="h-4 w-4 text-primary" />
                 <span>データは暗号化して保護</span>
               </div>
+            </div>
+
+            {/* Promo Video */}
+            <div className="mb-12">
+              <PromoVideo />
             </div>
 
             {/* Beta Notice */}

@@ -99,8 +99,8 @@ export function Sidebar() {
       {/* Mobile Sidebar */}
       <div
         className={cn(
-          'fixed top-14 left-0 z-30 h-[calc(100vh-3.5rem)] w-64 transform bg-white transition-transform duration-200 ease-in-out md:hidden',
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          'fixed top-14 right-0 z-30 h-[calc(100vh-3.5rem)] w-64 transform bg-white transition-transform duration-200 ease-in-out md:hidden',
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
         <nav className="flex-1 space-y-1 px-3 py-4">

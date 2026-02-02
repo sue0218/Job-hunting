@@ -20,7 +20,6 @@ import {
   TrendingUp,
   Users,
   Sparkles,
-  Play,
   Star,
 } from 'lucide-react'
 
@@ -130,16 +129,6 @@ export default function LandingPage() {
                   </span>
                 </Button>
               </Link>
-              <Link href="#how-it-works">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-14 w-full rounded-xl border-2 px-8 text-base font-semibold sm:w-auto"
-                >
-                  <Play className="mr-2 h-4 w-4" />
-                  使い方を見る
-                </Button>
-              </Link>
             </div>
 
             {/* Trust Signals */}
@@ -158,68 +147,14 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Social Proof Stats */}
-            <div className="mx-auto max-w-4xl rounded-2xl border bg-white/80 p-6 shadow-lg backdrop-blur-sm sm:p-8">
-              <div className="mb-4 text-center">
-                <p className="text-sm font-medium text-muted-foreground">すでに多くの就活生が活用中</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8">
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-3xl font-bold text-foreground sm:text-4xl">500</span>
-                    <span className="text-xl font-bold text-primary sm:text-2xl">+</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">登録ユーザー</p>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-3xl font-bold text-foreground sm:text-4xl">2,000</span>
-                    <span className="text-xl font-bold text-primary sm:text-2xl">+</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">登録された経験</p>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-3xl font-bold text-foreground sm:text-4xl">5,000</span>
-                    <span className="text-xl font-bold text-primary sm:text-2xl">+</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">生成されたES</p>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-3xl font-bold text-foreground sm:text-4xl">98</span>
-                    <span className="text-xl font-bold text-primary sm:text-2xl">%</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">満足度</p>
-                </div>
-              </div>
-
-              {/* Quick Testimonial */}
-              <div className="mt-6 border-t pt-6">
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
-                  <div className="flex -space-x-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-blue-600 text-sm font-bold text-white">
-                      K
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-green-400 to-green-600 text-sm font-bold text-white">
-                      M
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-purple-400 to-purple-600 text-sm font-bold text-white">
-                      S
-                    </div>
-                  </div>
-                  <div className="text-center sm:text-left">
-                    <div className="mb-1 flex items-center justify-center gap-1 sm:justify-start">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      「<span className="text-foreground">10社分のESを2日で作成</span>できた。面接でも矛盾なく答えられて内定獲得！」
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* Beta Notice */}
+            <div className="mx-auto max-w-2xl rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">
+              <p className="text-sm font-medium text-primary">
+                🎉 現在ベータ版として無料公開中
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                テストモニター募集中です。フィードバックをいただける方を歓迎します。
+              </p>
             </div>
           </div>
         </div>

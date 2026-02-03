@@ -78,20 +78,18 @@ export default function LandingPage() {
 
             {/* Main Headline */}
             <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              <span className="block">もうESを</span>
+              <span className="block">もうESを毎回ゼロから</span>
               <span className="block mt-1">
-                <span className="relative">
-                  <span className="relative z-10 bg-gradient-to-r from-primary via-blue-500 to-primary bg-clip-text text-transparent">
-                    毎回ゼロから
-                  </span>
+                <span className="relative z-10 bg-gradient-to-r from-primary via-blue-500 to-primary bg-clip-text text-transparent">
+                  書かなくていい
                 </span>
-                書かなくていい
               </span>
             </h1>
 
             {/* Sub-headline with specific benefit */}
             <p className="mx-auto mb-6 max-w-2xl text-xl text-muted-foreground sm:text-2xl">
               経験を<strong className="text-foreground">1回登録</strong>すれば、
+              <br />
               <strong className="text-foreground">何十社</strong>のESも面接も対応できる。
             </p>
 

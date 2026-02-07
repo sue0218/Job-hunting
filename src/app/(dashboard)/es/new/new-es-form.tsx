@@ -12,6 +12,7 @@ import { ArrowLeft, Sparkles, Loader2, Save, ChevronDown, ChevronUp, Lightbulb, 
 import Link from 'next/link'
 import { createEsDocument } from '@/lib/actions/es-documents'
 import { generateES } from '@/lib/llm/es-service'
+import { ShareModal } from '@/components/es/share-modal'
 import type { Experience } from '@/lib/db/schema'
 
 interface NewEsFormProps {
@@ -34,6 +35,7 @@ export function NewEsForm({ experiences }: NewEsFormProps) {
   const [selectedExperiences, setSelectedExperiences] = useState<string[]>([])
   const [showCommonQuestions, setShowCommonQuestions] = useState(false)
   const [error, setError] = useState<{ message: string; isQuotaError: boolean } | null>(null)
+  const [showShareModal, setShowShareModal] = useState(false)
   const [formData, setFormData] = useState({
     companyName: '',
     question: '',
@@ -113,7 +115,7 @@ export function NewEsForm({ experiences }: NewEsFormProps) {
         status: formData.content.length > 0 ? 'final' : 'draft',
       })
 
-      router.push('/es')
+      setShowShareModal(true)
     } catch (err) {
       console.error('Failed to save ES:', err)
       const errorMessage = err instanceof Error ? err.message : '保存に失敗しました'
@@ -403,6 +405,15 @@ export function NewEsForm({ experiences }: NewEsFormProps) {
           </Button>
         </div>
       </form>
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => {
+          setShowShareModal(false)
+          router.push('/es')
+        }}
+        esTitle={formData.companyName || 'ES'}
+      />
     </div>
   )
 }

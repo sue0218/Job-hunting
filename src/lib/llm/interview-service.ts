@@ -4,6 +4,8 @@ import { getLLMProvider, isLLMConfigured } from './index'
 import type { LLMMessage } from './types'
 import type { Experience, InterviewTurn } from '@/lib/db/schema'
 import { logger } from '@/lib/logger'
+import { getOrCreateUser } from '@/lib/actions/user'
+import { getEffectivePlan } from '@/lib/config/admin'
 
 export type InterviewerType = 'standard' | 'friendly' | 'strict' | 'logical'
 
@@ -80,18 +82,25 @@ const INTERVIEWER_PERSONAS: Record<InterviewerType, {
 /**
  * LLMを使って面接官の深掘り質問を生成
  */
-export async function generateFollowUpQuestion(input: GenerateFollowUpInput): Promise<string> {
+export async function generateFollowUpQuestion(input: GenerateFollowUpInput, plan?: 'free' | 'standard'): Promise<string> {
   if (!isLLMConfigured()) {
     return getFallbackQuestion(input.sessionType)
   }
 
   try {
+    let effectivePlan = plan
+    if (!effectivePlan) {
+      const user = await getOrCreateUser()
+      effectivePlan = getEffectivePlan(user.email, user.plan, user.trialEndsAt)
+    }
+
     const provider = getLLMProvider()
     const messages = buildFollowUpPrompt(input)
 
     const response = await provider.complete(messages, {
       temperature: 0.7,
       maxTokens: 300,
+      plan: effectivePlan,
     })
 
     logger.info('Interview follow-up generated', {
@@ -110,7 +119,7 @@ export async function generateFollowUpQuestion(input: GenerateFollowUpInput): Pr
 /**
  * LLMを使ってセッション終了時のフィードバックを生成
  */
-export async function generateInterviewFeedback(input: GenerateFeedbackInput): Promise<{
+export async function generateInterviewFeedback(input: GenerateFeedbackInput, plan?: 'free' | 'standard'): Promise<{
   feedback: string
   rating: number
 }> {
@@ -119,12 +128,19 @@ export async function generateInterviewFeedback(input: GenerateFeedbackInput): P
   }
 
   try {
+    let effectivePlan = plan
+    if (!effectivePlan) {
+      const user = await getOrCreateUser()
+      effectivePlan = getEffectivePlan(user.email, user.plan, user.trialEndsAt)
+    }
+
     const provider = getLLMProvider()
     const messages = buildFeedbackPrompt(input)
 
     const response = await provider.complete(messages, {
       temperature: 0.5,
       maxTokens: 1500,
+      plan: effectivePlan,
     })
 
     logger.info('Interview feedback generated', {

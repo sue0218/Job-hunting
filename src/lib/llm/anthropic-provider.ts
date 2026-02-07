@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { LLMProvider, LLMMessage, LLMCompletionOptions } from './types'
+import { PLAN_LIMITS } from '@/lib/config/admin'
 
 export class AnthropicProvider implements LLMProvider {
   name = 'anthropic'
@@ -18,6 +19,12 @@ export class AnthropicProvider implements LLMProvider {
   }
 
   async complete(messages: LLMMessage[], options?: LLMCompletionOptions): Promise<string> {
+    const planLimits = PLAN_LIMITS[options?.plan ?? 'standard']
+    const effectiveMaxTokens = Math.min(
+      options?.maxTokens ?? planLimits.maxTokensPerRequest,
+      planLimits.maxTokensPerRequest
+    )
+
     // Extract system message
     const systemMessage = messages.find(m => m.role === 'system')?.content
     const chatMessages = messages
@@ -29,7 +36,7 @@ export class AnthropicProvider implements LLMProvider {
 
     const response = await this.client.messages.create({
       model: this.model,
-      max_tokens: options?.maxTokens ?? 2000,
+      max_tokens: effectiveMaxTokens,
       system: systemMessage,
       messages: chatMessages,
     })
@@ -42,6 +49,12 @@ export class AnthropicProvider implements LLMProvider {
     messages: LLMMessage[],
     options?: LLMCompletionOptions
   ): AsyncIterable<string> {
+    const planLimits = PLAN_LIMITS[options?.plan ?? 'standard']
+    const effectiveMaxTokens = Math.min(
+      options?.maxTokens ?? planLimits.maxTokensPerRequest,
+      planLimits.maxTokensPerRequest
+    )
+
     // Extract system message
     const systemMessage = messages.find(m => m.role === 'system')?.content
     const chatMessages = messages
@@ -53,7 +66,7 @@ export class AnthropicProvider implements LLMProvider {
 
     const stream = this.client.messages.stream({
       model: this.model,
-      max_tokens: options?.maxTokens ?? 2000,
+      max_tokens: effectiveMaxTokens,
       system: systemMessage,
       messages: chatMessages,
     })

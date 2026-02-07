@@ -3,21 +3,23 @@
 import { db } from '@/lib/db/client'
 import { consistencyChecks, experiences, esDocuments } from '@/lib/db/schema'
 import { eq, desc } from 'drizzle-orm'
-import { getCurrentUserId } from './user'
+import { getOrCreateUser } from './user'
+import { getEffectivePlan } from '@/lib/config/admin'
 import { checkConsistency, checkESConsistency, checkInterviewConsistency, type ConsistencyCheckResult } from '@/lib/llm/consistency-service'
 import { revalidatePath } from 'next/cache'
 
 export async function runConsistencyCheck(): Promise<ConsistencyCheckResult> {
-  const userId = await getCurrentUserId()
+  const user = await getOrCreateUser()
+  const plan = getEffectivePlan(user.email, user.plan, user.trialEndsAt)
 
   // Get all user's experiences
   const userExperiences = await db.query.experiences.findMany({
-    where: eq(experiences.userId, userId),
+    where: eq(experiences.userId, user.id),
   })
 
   // Get all user's ES documents
   const userEsDocuments = await db.query.esDocuments.findMany({
-    where: eq(esDocuments.userId, userId),
+    where: eq(esDocuments.userId, user.id),
   })
 
   const expData = userExperiences.map(exp => ({
@@ -34,11 +36,11 @@ export async function runConsistencyCheck(): Promise<ConsistencyCheckResult> {
     content: es.editedContent || es.generatedContent || '',
   }))
 
-  const result = await checkConsistency(expData, esData)
+  const result = await checkConsistency(expData, esData, undefined, plan)
 
   // Save check result to database
   await db.insert(consistencyChecks).values({
-    userId,
+    userId: user.id,
     targetType: 'all',
     issues: result.issues,
   })
@@ -48,14 +50,15 @@ export async function runConsistencyCheck(): Promise<ConsistencyCheckResult> {
 }
 
 export async function runESConsistencyCheck(esId: string): Promise<ConsistencyCheckResult> {
-  const userId = await getCurrentUserId()
+  const user = await getOrCreateUser()
+  const plan = getEffectivePlan(user.email, user.plan, user.trialEndsAt)
 
   // Get the ES document
   const esDoc = await db.query.esDocuments.findFirst({
     where: eq(esDocuments.id, esId),
   })
 
-  if (!esDoc || esDoc.userId !== userId) {
+  if (!esDoc || esDoc.userId !== user.id) {
     return {
       hasIssues: false,
       issues: [],
@@ -65,7 +68,7 @@ export async function runESConsistencyCheck(esId: string): Promise<ConsistencyCh
 
   // Get user's experiences
   const userExperiences = await db.query.experiences.findMany({
-    where: eq(experiences.userId, userId),
+    where: eq(experiences.userId, user.id),
   })
 
   const expData = userExperiences.map(exp => ({
@@ -80,12 +83,13 @@ export async function runESConsistencyCheck(esId: string): Promise<ConsistencyCh
   const result = await checkESConsistency(
     expData,
     esDoc.editedContent || esDoc.generatedContent || '',
-    esDoc.question
+    esDoc.question,
+    plan
   )
 
   // Save check result
   await db.insert(consistencyChecks).values({
-    userId,
+    userId: user.id,
     targetType: 'es',
     targetId: esId,
     issues: result.issues,
@@ -99,10 +103,10 @@ export async function getLatestConsistencyCheck(): Promise<{
   result: ConsistencyCheckResult | null
   checkedAt: Date | null
 }> {
-  const userId = await getCurrentUserId()
+  const user = await getOrCreateUser()
 
   const latest = await db.query.consistencyChecks.findFirst({
-    where: eq(consistencyChecks.userId, userId),
+    where: eq(consistencyChecks.userId, user.id),
     orderBy: [desc(consistencyChecks.createdAt)],
   })
 

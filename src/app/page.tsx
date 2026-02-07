@@ -711,13 +711,13 @@ export default function LandingPage() {
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100">
                       <CheckCircle className="h-3 w-3 text-green-600" />
                     </div>
-                    ES生成 3回/月
+                    ES生成 2回/月
                   </li>
                   <li className="flex items-center gap-3">
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100">
                       <CheckCircle className="h-3 w-3 text-green-600" />
                     </div>
-                    面接練習 5回/月
+                    面接練習 1回/月
                   </li>
                   <li className="flex items-center gap-3">
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100">

@@ -8,9 +8,11 @@ import { revalidatePath } from 'next/cache'
 import {
   createExperienceSchema,
   updateExperienceSchema,
+  quickCreateExperienceSchema,
   uuidSchema,
   type CreateExperienceInput,
   type UpdateExperienceInput,
+  type QuickCreateExperienceInput,
 } from '@/lib/validations'
 import { enforceQuotaForUser } from '@/lib/quota/service'
 import { QuotaExceededError } from '@/lib/quota/types'
@@ -84,6 +86,42 @@ export async function createExperience(data: CreateExperienceInput): Promise<Exp
 
   revalidatePath('/experiences')
   return created
+}
+
+export async function quickCreateExperience(
+  data: QuickCreateExperienceInput
+): Promise<{ id: string } | { error: string }> {
+  try {
+    const validated = quickCreateExperienceSchema.parse(data)
+
+    const user = await getOrCreateUser()
+    await enforceQuotaForUser(user.id, user.email, user.plan, 'experience', user.trialEndsAt)
+
+    const [created] = await db.insert(experiences).values({
+      title: validated.title,
+      category: validated.category,
+      rawNotes: validated.rawNotes,
+      userId: user.id,
+    }).returning()
+
+    const { userId: clerkId } = await auth()
+    if (clerkId) {
+      await trackEvent('experience_created', clerkId, { experienceId: created.id, source: 'onboarding' })
+      await checkAndQualifyReferral(clerkId)
+    }
+
+    revalidatePath('/experiences')
+    revalidatePath('/dashboard')
+    return { id: created.id }
+  } catch (error) {
+    if (error instanceof Error && error.name === 'ZodError') {
+      return { error: '入力内容を確認してください' }
+    }
+    if (error instanceof QuotaExceededError) {
+      return { error: error.message }
+    }
+    return { error: '経験の登録に失敗しました' }
+  }
 }
 
 export async function updateExperience(

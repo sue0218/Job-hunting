@@ -44,13 +44,15 @@ export function getEffectivePlan(
 export const PLAN_LIMITS = {
   free: {
     experiences: 3,
-    esGenerationsPerMonth: 3,
-    interviewSessionsPerMonth: 5,
+    esGenerationsPerMonth: 2,
+    interviewSessionsPerMonth: 1,
+    maxTokensPerRequest: 1000,
   },
   standard: {
     experiences: Infinity,
     esGenerationsPerMonth: 30,
     interviewSessionsPerMonth: 60,
+    maxTokensPerRequest: 2000,
   },
 }
 

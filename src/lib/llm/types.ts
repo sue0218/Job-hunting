@@ -7,6 +7,7 @@ export interface LLMCompletionOptions {
   temperature?: number
   maxTokens?: number
   stream?: boolean
+  plan?: 'free' | 'standard'
 }
 
 export interface LLMProvider {

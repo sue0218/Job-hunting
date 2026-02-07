@@ -115,7 +115,8 @@ ${interviewText}
 export async function checkConsistency(
   experiences: ExperienceData[],
   esDocuments: ESData[],
-  interviewData?: InterviewData
+  interviewData?: InterviewData,
+  plan?: 'free' | 'standard'
 ): Promise<ConsistencyCheckResult> {
   if (!isLLMConfigured()) {
     return {
@@ -139,6 +140,7 @@ export async function checkConsistency(
     const response = await provider.complete(messages, {
       temperature: 0.3, // Lower temperature for more consistent analysis
       maxTokens: 1500,
+      plan: plan ?? 'free',
     })
 
     // Parse JSON response
@@ -166,15 +168,17 @@ export async function checkConsistency(
 export async function checkESConsistency(
   experiences: ExperienceData[],
   esContent: string,
-  esQuestion: string
+  esQuestion: string,
+  plan?: 'free' | 'standard'
 ): Promise<ConsistencyCheckResult> {
-  return checkConsistency(experiences, [{ question: esQuestion, content: esContent }])
+  return checkConsistency(experiences, [{ question: esQuestion, content: esContent }], undefined, plan)
 }
 
 export async function checkInterviewConsistency(
   experiences: ExperienceData[],
   esDocuments: ESData[],
-  turns: { interviewerMessage: string | null; userResponse: string | null }[]
+  turns: { interviewerMessage: string | null; userResponse: string | null }[],
+  plan?: 'free' | 'standard'
 ): Promise<ConsistencyCheckResult> {
-  return checkConsistency(experiences, esDocuments, { turns })
+  return checkConsistency(experiences, esDocuments, { turns }, plan)
 }

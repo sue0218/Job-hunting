@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { getExperiences } from '@/lib/actions/experiences'
 import { getEsDocuments } from '@/lib/actions/es-documents'
 import { getInterviewSessions } from '@/lib/actions/interview-sessions'
@@ -5,7 +6,6 @@ import { getLatestConsistencyCheck } from '@/lib/actions/consistency-checks'
 import { getOrCreateUser } from '@/lib/actions/user'
 import { getUserEntitlement } from '@/lib/actions/beta'
 import { DashboardContent } from './dashboard-content'
-import { OnboardingModal } from '@/components/onboarding/onboarding-modal'
 
 export default async function DashboardPage() {
   const [user, experiences, esDocuments, interviewSessions, consistencyCheck, entitlement] = await Promise.all([
@@ -17,13 +17,14 @@ export default async function DashboardPage() {
     getUserEntitlement(),
   ])
 
-  // Show onboarding only for truly new users
-  // Don't show if they've already used the app (have experiences, ES, or completed feedback)
-  const hasUsedApp = experiences.length > 0 || 
-                     esDocuments.length > 0 || 
+  // Redirect to onboarding wizard for truly new users
+  const hasUsedApp = experiences.length > 0 ||
+                     esDocuments.length > 0 ||
                      interviewSessions.length > 0 ||
                      entitlement?.surveyCompletedAt
-  const showOnboarding = !user.onboardingCompleted && !hasUsedApp
+  if (!user.onboardingCompleted && !hasUsedApp) {
+    redirect('/dashboard/onboarding')
+  }
 
   // Calculate interview stats
   const completedInterviews = interviewSessions.filter(s => s.status === 'completed')
@@ -51,7 +52,6 @@ export default async function DashboardPage() {
 
   return (
     <>
-      {showOnboarding && <OnboardingModal />}
       <DashboardContent
         experienceCount={experiences.length}
         esCount={monthlyEsCount}

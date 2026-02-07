@@ -69,7 +69,15 @@ export const addInterviewTurnSchema = z.object({
   feedback: z.string().max(5000).nullable().optional(),
 })
 
+// Quick Create Experience schema (onboarding wizard)
+export const quickCreateExperienceSchema = z.object({
+  title: z.string().min(1, 'タイトルは必須です').max(200, 'タイトルは200文字以内で入力してください'),
+  category: z.string().min(1, 'カテゴリを選択してください').max(100, 'カテゴリは100文字以内で入力してください'),
+  rawNotes: z.string().min(1, 'メモを入力してください').max(10000, 'メモは10000文字以内で入力してください'),
+})
+
 // Types
+export type QuickCreateExperienceInput = z.infer<typeof quickCreateExperienceSchema>
 export type CreateExperienceInput = z.infer<typeof createExperienceSchema>
 export type UpdateExperienceInput = z.infer<typeof updateExperienceSchema>
 export type CreateEsDocumentInput = z.infer<typeof createEsDocumentSchema>

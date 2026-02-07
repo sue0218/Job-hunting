@@ -3,7 +3,8 @@
 import { getLLMProvider, isLLMConfigured } from './index'
 import { buildESGenerationPrompt } from './prompts'
 import type { ESGenerationInput, LLMMessage } from './types'
-import { getCurrentUserId } from '@/lib/actions/user'
+import { getOrCreateUser } from '@/lib/actions/user'
+import { getEffectivePlan } from '@/lib/config/admin'
 import { checkRateLimit, ES_GENERATION_LIMIT, RateLimitError } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
 
@@ -42,10 +43,10 @@ function cleanupESContent(content: string): string {
   return cleaned.trim()
 }
 
-export async function generateES(input: ESGenerationInput): Promise<string> {
-  // Apply rate limiting
-  const userId = await getCurrentUserId()
-  const rateLimitKey = `es-gen:${userId}`
+export async function generateES(input: ESGenerationInput, plan?: 'free' | 'standard'): Promise<string> {
+  // Get user info for rate limiting and plan resolution
+  const user = await getOrCreateUser()
+  const rateLimitKey = `es-gen:${user.id}`
   const rateLimitResult = checkRateLimit(rateLimitKey, ES_GENERATION_LIMIT)
 
   if (!rateLimitResult.success) {
@@ -55,6 +56,8 @@ export async function generateES(input: ESGenerationInput): Promise<string> {
   if (!isLLMConfigured()) {
     return generateESFallback(input)
   }
+
+  const effectivePlan = plan ?? getEffectivePlan(user.email, user.plan, user.trialEndsAt)
 
   try {
     const provider = getLLMProvider()
@@ -73,6 +76,7 @@ export async function generateES(input: ESGenerationInput): Promise<string> {
       const rawDraft = await provider.complete(messages, {
         temperature: 0.7,
         maxTokens: 2000,
+        plan: effectivePlan,
       })
 
       let content = cleanupESContent(rawDraft)
@@ -91,7 +95,7 @@ export async function generateES(input: ESGenerationInput): Promise<string> {
 
       // If too long, trim it carefully
       if (content.length > charLimit) {
-        content = await trimToLimit(provider, content, charLimit, targetChars, input.question)
+        content = await trimToLimit(provider, content, charLimit, targetChars, input.question, effectivePlan)
 
         if (content.length >= minChars && content.length <= charLimit) {
           return content
@@ -100,7 +104,7 @@ export async function generateES(input: ESGenerationInput): Promise<string> {
 
       // If too short, try to expand
       if (content.length < minChars) {
-        content = await expandToTarget(provider, content, charLimit, targetChars, input.question)
+        content = await expandToTarget(provider, content, charLimit, targetChars, input.question, effectivePlan)
 
         if (content.length >= minChars && content.length <= charLimit) {
           return content
@@ -148,7 +152,8 @@ async function expandToTarget(
   content: string,
   charLimit: number,
   targetChars: number,
-  question: string
+  question: string,
+  plan: 'free' | 'standard' = 'free'
 ): Promise<string> {
   const messages: LLMMessage[] = [
     {
@@ -179,6 +184,7 @@ ${content}
   const rawExpanded = await provider.complete(messages, {
     temperature: 0.5,
     maxTokens: charLimit + 200,
+    plan,
   })
 
   const expanded = cleanupESContent(rawExpanded)
@@ -196,7 +202,7 @@ ${content}
 
   // If over limit, trim it
   if (expanded.length > charLimit) {
-    return trimToLimit(provider, expanded, charLimit, targetChars, question)
+    return trimToLimit(provider, expanded, charLimit, targetChars, question, plan)
   }
 
   return content
@@ -210,7 +216,8 @@ async function trimToLimit(
   content: string,
   charLimit: number,
   targetChars: number,
-  question: string
+  question: string,
+  plan: 'free' | 'standard' = 'free'
 ): Promise<string> {
   const messages: LLMMessage[] = [
     {
@@ -242,6 +249,7 @@ ${content}
   const rawResult = await provider.complete(messages, {
     temperature: 0.3,
     maxTokens: charLimit,
+    plan,
   })
 
   const result = cleanupESContent(rawResult)

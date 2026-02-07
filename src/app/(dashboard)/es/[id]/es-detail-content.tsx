@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Pencil, Trash2, Building2, Clock, Copy, Check } from 'lucide-react'
+import { ArrowLeft, Pencil, Trash2, Building2, Clock, Copy, Check, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { deleteEsDocument } from '@/lib/actions/es-documents'
+import { ShareModal } from '@/components/es/share-modal'
 import type { EsDocument, Experience } from '@/lib/db/schema'
 
 interface EsDetailContentProps {
@@ -19,6 +20,7 @@ export function EsDetailContent({ document, experiences }: EsDetailContentProps)
   const router = useRouter()
   const [copied, setCopied] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const handleDelete = async () => {
     if (!confirm('このESを削除しますか？')) return
@@ -78,6 +80,10 @@ export function EsDetailContent({ document, experiences }: EsDetailContentProps)
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowShareModal(true)}>
+            <Share2 className="mr-2 h-4 w-4" />
+            シェア
+          </Button>
           <Link href={`/es/${document.id}/edit`}>
             <Button variant="outline">
               <Pencil className="mr-2 h-4 w-4" />
@@ -180,6 +186,12 @@ export function EsDetailContent({ document, experiences }: EsDetailContentProps)
           更新: {new Date(document.updatedAt).toLocaleString('ja-JP')}
         </span>
       </div>
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        esTitle={document.companyName || document.title}
+      />
     </div>
   )
 }

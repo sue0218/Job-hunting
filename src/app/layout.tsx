@@ -21,8 +21,9 @@ export const metadata: Metadata = {
   keywords: ['ガクチカ', '就活', 'ES', '面接練習', 'AI', 'エントリーシート', 'STAR'],
   manifest: '/manifest.json',
   openGraph: {
-    title: 'ガクチカバンクAI',
-    description: '経験を資産に、ESも面接もブレない就活',
+    title: 'ガクチカバンクAI - 経験を資産に、ESも面接もブレない就活',
+    description:
+      'ガクチカを1回登録すれば、何社でも使える。STAR形式で経験を整理し、AIがES生成・面接練習・整合性チェックまで一気通貫でサポート。',
     siteName: 'ガクチカバンクAI',
     url: 'https://gakuchika-bank.com',
     type: 'website',
@@ -30,8 +31,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ガクチカバンクAI',
-    description: '経験を資産に、ESも面接もブレない就活',
+    title: 'ガクチカバンクAI - 経験を資産に、ESも面接もブレない就活',
+    description:
+      'ガクチカを1回登録すれば何社でも使える。AIがES生成・面接練習・整合性チェックまで一気通貫サポート。',
   },
 }
 

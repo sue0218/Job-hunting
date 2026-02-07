@@ -1,41 +1,35 @@
-import { Users, FileText, Star } from "lucide-react";
+import { Users, FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function SocialProofSection() {
   const stats = [
     {
       icon: Users,
-      value: "3,200+",
+      value: "1,000+",
       label: "名の就活生が利用",
     },
     {
       icon: FileText,
-      value: "15,000+",
+      value: "3,000+",
       label: "件のES生成実績",
-    },
-    {
-      icon: Star,
-      value: "4.8 / 5.0",
-      label: "平均ユーザー評価",
-      starFilled: true,
     },
   ];
 
   const testimonials = [
     {
-      text: "ESの作成時間が1/10に。経験DBのおかげで何社でも一貫性のある内容を出せました。",
-      author: "T.K.",
-      school: "早稲田大学 商学部",
+      text: "毎回ESゼロから書き直してたのがバカみたいです。経験を一回登録したら、企業ごとに勝手に調整してくれるので10社出すのも余裕でした。",
+      author: "26卒 男性",
+      school: "都内私立大学 経済学部",
     },
     {
-      text: "面接で「ESと違うね」と言われることがなくなりました。整合性チェックが神機能。",
-      author: "M.S.",
-      school: "慶應義塾大学 法学部",
+      text: "面接で「ESに書いてあることと違うよね？」って言われるのが一番怖かったけど、整合性チェックのおかげでそれがなくなった。安心感が違います。",
+      author: "26卒 女性",
+      school: "関東国立大学 文学部",
     },
     {
-      text: "ChatGPTでES作ってたけど、経験の管理が面倒すぎた。これは全部つながってるから楽。",
-      author: "A.Y.",
-      school: "東京大学 工学部",
+      text: "最初ChatGPT使ってたけど、毎回経験コピペするのが面倒すぎて挫折。これは経験が保存されてるから、設問入れるだけでES出てくるのがいい。",
+      author: "26卒 男性",
+      school: "都内私立大学 工学部",
     },
   ];
 
@@ -43,18 +37,14 @@ export function SocialProofSection() {
     <section className="py-20 sm:py-28 bg-gradient-to-b from-white to-slate-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats */}
-        <div className="max-w-5xl mx-auto grid gap-6 sm:grid-cols-3 mb-16">
+        <div className="max-w-3xl mx-auto grid gap-6 sm:grid-cols-2 mb-16">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <Card key={index} className="text-center border-slate-200 hover:border-primary/50 transition-colors">
                 <CardContent className="pt-8 pb-8">
                   <div className="flex justify-center mb-4">
-                    <Icon
-                      className={`h-10 w-10 ${
-                        stat.starFilled ? "text-amber-500 fill-amber-500" : "text-primary"
-                      }`}
-                    />
+                    <Icon className="h-10 w-10 text-primary" />
                   </div>
                   <div className="text-4xl font-bold text-slate-900 mb-2">
                     {stat.value}
@@ -75,14 +65,6 @@ export function SocialProofSection() {
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="border-slate-200 bg-white hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6 pb-6">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 text-amber-500 fill-amber-500"
-                      />
-                    ))}
-                  </div>
                   <p className="text-slate-700 mb-4 leading-relaxed">
                     {testimonial.text}
                   </p>

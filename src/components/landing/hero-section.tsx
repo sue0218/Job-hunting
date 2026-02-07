@@ -42,11 +42,11 @@ export function HeroSection() {
           {/* Social Proof Numbers */}
           <div className="mx-auto mb-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-primary">3,200+</span>
+              <span className="text-2xl font-bold text-primary">1,000+</span>
               <span>名の就活生が利用</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-primary">15,000+</span>
+              <span className="text-2xl font-bold text-primary">3,000+</span>
               <span>件のES生成実績</span>
             </div>
           </div>

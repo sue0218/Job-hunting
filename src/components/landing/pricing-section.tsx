@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Clock, Check } from "lucide-react";
+import { Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,7 +29,7 @@ export function PricingSection() {
             <div className="flex items-center justify-center gap-2 text-white">
               <Sparkles className="h-5 w-5" />
               <p className="text-lg font-bold">
-                期間限定: Standard プラン50%OFF ¥1,980 → ¥980
+                ローンチ記念価格で提供中
               </p>
               <Sparkles className="h-5 w-5" />
             </div>
@@ -112,20 +112,13 @@ export function PricingSection() {
             <CardHeader>
               <div className="mb-2">
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/10">
-                  期間限定50%OFF
+                  ローンチ記念価格
                 </Badge>
               </div>
               <CardTitle className="text-2xl">Standard</CardTitle>
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-slate-400 line-through">
-                  ¥1,980
-                </span>
-                <span className="text-6xl font-bold text-primary">¥980</span>
-                <span className="text-slate-600">/月</span>
-              </div>
-              <div className="mt-3 flex items-center gap-2 text-sm text-orange-600 bg-orange-50 px-3 py-2 rounded-lg border border-orange-200">
-                <Clock className="h-4 w-4" />
-                <span className="font-medium">先着100名様限定（残り67名）</span>
+              <div className="mt-4">
+                <span className="text-5xl font-bold text-primary">¥980</span>
+                <span className="text-slate-600 ml-2">/月</span>
               </div>
             </CardHeader>
             <CardContent className="flex-1">
@@ -178,7 +171,7 @@ export function PricingSection() {
             </CardContent>
             <CardFooter>
               <Button className="w-full bg-gradient-to-r from-primary to-blue-600 shadow-lg hover:shadow-xl transition-shadow" size="lg" asChild>
-                <Link href="/sign-up">今すぐ始める（50%OFF）</Link>
+                <Link href="/sign-up">今すぐ始める</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -229,10 +222,10 @@ export function PricingSection() {
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-6">
               <h4 className="font-medium text-slate-900 mb-2">
-                50%OFFはいつまでですか？
+                料金プランについて教えてください
               </h4>
               <p className="text-slate-600">
-                先着100名様限定です。定員に達し次第、通常価格に戻ります。
+                現在ローンチ記念価格として月額¥980で提供しています。
               </p>
             </div>
           </div>

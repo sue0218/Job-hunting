@@ -45,7 +45,7 @@ export function ExitIntentModal() {
             ちょっと待って！
           </CardTitle>
           <CardDescription className="text-base text-slate-600 mt-2">
-            今ならStandard プラン50%OFFで始められます（先着100名様限定）
+            今ならローンチ記念価格で始められます
           </CardDescription>
         </CardHeader>
 

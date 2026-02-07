@@ -282,7 +282,7 @@ export default async function BetaPage() {
           </h2>
           <p className="mb-8 text-white/80">
             {isFull
-              ? '無料プランでも経験3件、ES生成3回/月、面接練習5回/月が使えます'
+              ? '無料プランでも経験3件、ES生成2回/月、面接練習1回/月が使えます'
               : `残り${campaign.remainingSlots}枠。お早めにどうぞ！`}
           </p>
           <Link href={isFull ? '/sign-up' : '/sign-up?ref=beta'}>

@@ -15,6 +15,7 @@ import {
   Sparkles,
   Menu,
   X,
+  Gift,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -23,6 +24,7 @@ const navigation = [
   { name: '経験DB', href: '/experiences', icon: BookOpen },
   { name: 'ES作成', href: '/es', icon: FileText },
   { name: '面接練習', href: '/interview', icon: MessageSquare },
+  { name: '友達を招待', href: '/invite', icon: Gift },
   { name: 'プラン・課金', href: '/billing', icon: CreditCard },
   { name: '設定', href: '/settings', icon: Settings },
 ]

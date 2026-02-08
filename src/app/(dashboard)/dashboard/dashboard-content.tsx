@@ -5,7 +5,7 @@ import { useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { BookOpen, FileText, MessageSquare, TrendingUp, Crown, Plus, ArrowRight, AlertTriangle, CheckCircle, Loader2, RefreshCw, Star, Clock, Building2 } from 'lucide-react'
+import { BookOpen, FileText, MessageSquare, TrendingUp, Crown, Plus, ArrowRight, AlertTriangle, CheckCircle, Loader2, RefreshCw, Star, Clock, Building2, Gift } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { isAdminEmail, getEffectivePlan, getPlanLimits, isOnTrial } from '@/lib/config/admin'
@@ -460,6 +460,31 @@ export function DashboardContent({
               </CardContent>
             </Card>
           )}
+        </div>
+      )}
+
+      {/* Invite Banner - show when user has created at least 1 experience */}
+      {experienceCount > 0 && (
+        <div className="mt-6 sm:mt-8">
+          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-blue-50">
+            <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <Gift className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium text-slate-900">友達を招待して+7日間ゲット</p>
+                  <p className="text-sm text-slate-600">招待した友達がESを作成すると、お互いに7日間の無料延長</p>
+                </div>
+              </div>
+              <Link href="/invite" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto border-primary text-primary hover:bg-primary hover:text-white">
+                  招待ページへ
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>

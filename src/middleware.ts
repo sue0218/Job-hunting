@@ -2,8 +2,8 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/api/webhooks(.*)', '/opengraph-image(.*)', '/sitemap.xml', '/robots.txt', '/beta', '/invite(.*)', '/privacy', '/terms', '/tokushoho'])
-const publicPaths = ['/', '/sign-in', '/sign-up', '/api/webhooks', '/opengraph-image', '/sitemap.xml', '/robots.txt', '/beta', '/invite', '/privacy', '/terms', '/tokushoho']
+const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/api/webhooks(.*)', '/opengraph-image(.*)', '/sitemap.xml', '/robots.txt', '/beta', '/invite(.*)', '/privacy', '/terms', '/tokushoho', '/guides(.*)'])
+const publicPaths = ['/', '/sign-in', '/sign-up', '/api/webhooks', '/opengraph-image', '/sitemap.xml', '/robots.txt', '/beta', '/invite', '/privacy', '/terms', '/tokushoho', '/guides']
 
 function isClerkConfigured(): boolean {
   const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY

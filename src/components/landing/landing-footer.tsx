@@ -14,6 +14,15 @@ export function LandingFooter() {
               ガクチカバンクAI
             </span>
           </div>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">ガクチカ書き方ガイド:</span>
+            <Link href="/guides/gakuchika-baito" className="transition-colors hover:text-foreground">バイト</Link>
+            <Link href="/guides/gakuchika-circle" className="transition-colors hover:text-foreground">サークル</Link>
+            <Link href="/guides/gakuchika-zemi" className="transition-colors hover:text-foreground">ゼミ</Link>
+            <Link href="/guides/gakuchika-bukatsu" className="transition-colors hover:text-foreground">部活</Link>
+            <Link href="/guides/gakuchika-internship" className="transition-colors hover:text-foreground">インターン</Link>
+            <Link href="/guides/gakuchika-nai" className="transition-colors hover:text-foreground">ガクチカがない</Link>
+          </div>
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <Link
               href="/terms"

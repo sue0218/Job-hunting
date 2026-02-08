@@ -214,18 +214,42 @@ export function PricingSection() {
           <div className="space-y-4">
             <div className="bg-white rounded-xl border border-slate-200 p-6">
               <h4 className="font-medium text-slate-900 mb-2">
-                無料プランから有料プランへの切り替えは簡単ですか？
+                ChatGPTとの違いは何ですか？
               </h4>
               <p className="text-slate-600">
-                はい、ダッシュボードから1クリックでアップグレードできます。
+                ChatGPTは汎用AIのため、毎回経験を入力し直す必要があります。ガクチカバンクAIは経験を一度登録すれば何社でも使い回せ、ES・面接・整合性チェックが連動するため、一貫性のある就活対策が可能です。
               </p>
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-6">
               <h4 className="font-medium text-slate-900 mb-2">
-                料金プランについて教えてください
+                無料で使えますか？
               </h4>
               <p className="text-slate-600">
-                現在ローンチ記念価格として月額¥980で提供しています。
+                はい、無料プランでは経験DB 3件、ES生成 2回/月、面接練習 1回/月が利用できます。有料プラン（月額¥980）では経験DB無制限、ES生成 30回/月、面接練習 60回/月に拡大します。
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <h4 className="font-medium text-slate-900 mb-2">
+                ES生成にはどれくらい時間がかかりますか？
+              </h4>
+              <p className="text-slate-600">
+                経験を登録済みの場合、ES生成は約30秒〜1分で完了します。手書きで2時間かかっていたESが5分以内に作成可能です。
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <h4 className="font-medium text-slate-900 mb-2">
+                無料プランから有料プランへの切り替えは簡単ですか？
+              </h4>
+              <p className="text-slate-600">
+                はい、ダッシュボードから1クリックでアップグレードできます。いつでもキャンセル可能です。
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <h4 className="font-medium text-slate-900 mb-2">
+                AIが生成したESはそのまま提出して大丈夫ですか？
+              </h4>
+              <p className="text-slate-600">
+                AIはあなたの実体験をもとに文章を構成するため、内容はオリジナルです。ただし、生成後に自分の言葉で微調整することで、より自然で説得力のあるESに仕上がります。
               </p>
             </div>
           </div>

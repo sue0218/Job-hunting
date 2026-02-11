@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ClerkProviderWrapper } from '@/components/providers/clerk-provider'
+import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
@@ -49,10 +52,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <GoogleAnalytics />
         <ClerkProviderWrapper>
           {children}
           <Toaster />
         </ClerkProviderWrapper>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

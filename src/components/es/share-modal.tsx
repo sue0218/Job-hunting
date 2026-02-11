@@ -24,7 +24,7 @@ export function ShareModal({ isOpen, onClose, esTitle }: ShareModalProps) {
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const shareText = useMemo(() => {
-    return `AIでES作ったら${esTitle}が5分で完成した。もう手書きには戻れない gakuchika-bank.com #26卒 #就活`
+    return `AIでES作ったら${esTitle}が5分で完成した。もう手書きには戻れない gakuchika-bank.com #就活 #ES`
   }, [esTitle])
 
   const xShareUrl = useMemo(() => {

@@ -17,7 +17,7 @@ export function HeroSection() {
               <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-amber-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
             </span>
-            <span className="font-medium text-amber-800">26卒 本選考シーズン開始</span>
+            <span className="font-medium text-amber-800">ES提出ラッシュ到来中</span>
           </div>
         </div>
 

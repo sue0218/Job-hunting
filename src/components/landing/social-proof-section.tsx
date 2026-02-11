@@ -2,34 +2,34 @@ import { Users, FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function SocialProofSection() {
-  const stats = [
-    {
-      icon: Users,
-      value: "500+",
-      label: "名の就活生が利用",
-    },
+  const features = [
     {
       icon: FileText,
-      value: "3,000+",
-      label: "件のES生成実績",
+      value: "5分",
+      label: "でES1本が完成",
+    },
+    {
+      icon: Users,
+      value: "30日間",
+      label: "全機能を無料で体験",
     },
   ];
 
   const testimonials = [
     {
       text: "毎回ESゼロから書き直してたのがバカみたいです。経験を一回登録したら、企業ごとに勝手に調整してくれるので10社出すのも余裕でした。",
-      author: "26卒 男性",
-      school: "都内私立大学 経済学部",
+      author: "私立大学 経済学部",
+      school: "就活生",
     },
     {
       text: "面接で「ESに書いてあることと違うよね？」って言われるのが一番怖かったけど、整合性チェックのおかげでそれがなくなった。安心感が違います。",
-      author: "26卒 女性",
-      school: "関東国立大学 文学部",
+      author: "国立大学 文学部",
+      school: "就活生",
     },
     {
       text: "最初ChatGPT使ってたけど、毎回経験コピペするのが面倒すぎて挫折。これは経験が保存されてるから、設問入れるだけでES出てくるのがいい。",
-      author: "26卒 男性",
-      school: "都内私立大学 工学部",
+      author: "私立大学 工学部",
+      school: "就活生",
     },
   ];
 
@@ -38,8 +38,8 @@ export function SocialProofSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats */}
         <div className="max-w-3xl mx-auto grid gap-6 sm:grid-cols-2 mb-16">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
+          {features.map((feat, index) => {
+            const Icon = feat.icon;
             return (
               <Card key={index} className="text-center border-slate-200 hover:border-primary/50 transition-colors">
                 <CardContent className="pt-8 pb-8">
@@ -47,9 +47,9 @@ export function SocialProofSection() {
                     <Icon className="h-10 w-10 text-primary" />
                   </div>
                   <div className="text-4xl font-bold text-slate-900 mb-2">
-                    {stat.value}
+                    {feat.value}
                   </div>
-                  <p className="text-slate-600">{stat.label}</p>
+                  <p className="text-slate-600">{feat.label}</p>
                 </CardContent>
               </Card>
             );

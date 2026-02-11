@@ -18,7 +18,7 @@ export const PLANS = {
     name: 'Free',
     price: 0,
     experiences: 3,
-    esGenerationsPerMonth: 3,
+    esGenerationsPerMonth: 10,
     interviewSessionsPerMonth: 5,
   },
   standard: {

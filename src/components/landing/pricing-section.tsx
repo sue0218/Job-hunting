@@ -64,15 +64,15 @@ export function PricingSection() {
                 <li className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900">ES生成 2回/月</p>
-                    <p className="text-sm text-slate-600">約2社分のES作成が可能</p>
+                    <p className="font-medium text-slate-900">ES生成 10回/月</p>
+                    <p className="text-sm text-slate-600">約10社分のES作成が可能</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900">面接練習 1回/月</p>
-                    <p className="text-sm text-slate-600">月1回の模擬面接</p>
+                    <p className="font-medium text-slate-900">面接練習 5回/月</p>
+                    <p className="text-sm text-slate-600">月5回の模擬面接</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -117,7 +117,7 @@ export function PricingSection() {
               </div>
               <CardTitle className="text-2xl">Standard</CardTitle>
               <div className="mt-4">
-                <span className="text-5xl font-bold text-primary">¥980</span>
+                <span className="text-5xl font-bold text-primary">¥1,980</span>
                 <span className="text-slate-600 ml-2">/月</span>
               </div>
             </CardHeader>
@@ -190,12 +190,12 @@ export function PricingSection() {
             </div>
             <div className="grid grid-cols-3 gap-4 p-4 border-b border-slate-100">
               <div className="text-slate-700">月の応募企業数</div>
-              <div className="text-center text-slate-600">2社まで</div>
+              <div className="text-center text-slate-600">10社まで</div>
               <div className="text-center text-primary font-medium">30社まで</div>
             </div>
             <div className="grid grid-cols-3 gap-4 p-4 border-b border-slate-100">
               <div className="text-slate-700">面接練習の頻度</div>
-              <div className="text-center text-slate-600">月1回</div>
+              <div className="text-center text-slate-600">月5回</div>
               <div className="text-center text-primary font-medium">毎日2回</div>
             </div>
             <div className="grid grid-cols-3 gap-4 p-4">
@@ -225,7 +225,7 @@ export function PricingSection() {
                 無料で使えますか？
               </h4>
               <p className="text-slate-600">
-                はい、無料プランでは経験DB 3件、ES生成 2回/月、面接練習 1回/月が利用できます。有料プラン（月額¥980）では経験DB無制限、ES生成 30回/月、面接練習 60回/月に拡大します。
+                はい、無料プランでは経験DB 3件、ES生成 10回/月、面接練習 5回/月が利用できます。有料プラン（月額¥1,980）では経験DB無制限、ES生成 30回/月、面接練習 60回/月に拡大します。
               </p>
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-6">

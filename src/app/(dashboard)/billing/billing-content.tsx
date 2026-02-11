@@ -223,11 +223,11 @@ export function BillingContent({
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <Check className="h-4 w-4 text-green-500" />
-                ES生成 2回/月
+                ES生成 10回/月
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <Check className="h-4 w-4 text-green-500" />
-                面接練習 1回/月
+                面接練習 5回/月
               </li>
             </ul>
             <Button variant="outline" className="mt-4 w-full" disabled={effectivePlan === 'free'}>

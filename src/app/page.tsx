@@ -27,11 +27,11 @@ const jsonLd = {
           price: '0',
           priceCurrency: 'JPY',
           name: 'Free',
-          description: '経験DB 3件、ES生成 2回/月、面接練習 1回/月',
+          description: '経験DB 3件、ES生成 10回/月、面接練習 5回/月',
         },
         {
           '@type': 'Offer',
-          price: '980',
+          price: '1980',
           priceCurrency: 'JPY',
           name: 'Standard',
           description: '経験DB無制限、ES生成 30回/月、面接練習 60回/月',
@@ -54,7 +54,7 @@ const jsonLd = {
           name: '無料で使えますか？',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'はい、無料プランでは経験DB 3件、ES生成 2回/月、面接練習 1回/月が利用できます。有料プラン（月額¥980）では経験DB無制限、ES生成 30回/月、面接練習 60回/月に拡大します。',
+            text: 'はい、無料プランでは経験DB 3件、ES生成 10回/月、面接練習 5回/月が利用できます。有料プラン（月額¥1,980）では経験DB無制限、ES生成 30回/月、面接練習 60回/月に拡大します。',
           },
         },
         {

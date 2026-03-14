@@ -13,6 +13,10 @@ const queryClient = postgres(connectionString, {
   max: 1, // Limit connections for Session Pooler
   idle_timeout: 20,
   connect_timeout: 10,
+  max_lifetime: 60 * 5, // 5 minutes max connection lifetime
+  connection: {
+    statement_timeout: 30000, // 30 seconds query timeout (prevents 300s Vercel timeout)
+  },
 })
 export const db = drizzle(queryClient, { schema })
 

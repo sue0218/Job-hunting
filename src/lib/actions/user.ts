@@ -49,47 +49,73 @@ export async function getOrCreateUser(): Promise<UserWithEntitlement> {
     }
   }
 
-  // Create new user
-  const clerkUser = await currentUser()
-  const email = clerkUser?.emailAddresses[0]?.emailAddress || ''
-  const name = clerkUser?.firstName
-    ? `${clerkUser.firstName} ${clerkUser.lastName || ''}`.trim()
-    : null
+  // Create new user - handle race condition where parallel calls
+  // may try to create the same user simultaneously
+  try {
+    const clerkUser = await currentUser()
+    const email = clerkUser?.emailAddresses[0]?.emailAddress || ''
+    const name = clerkUser?.firstName
+      ? `${clerkUser.firstName} ${clerkUser.lastName || ''}`.trim()
+      : null
 
-  const [newUser] = await db.insert(users).values({
-    clerkId,
-    email,
-    name,
-  }).returning()
+    const [newUser] = await db.insert(users).values({
+      clerkId,
+      email,
+      name,
+    }).returning()
 
-  // Initialize user entitlement (invite code, etc.)
-  await initializeUserEntitlement(clerkId)
+    // Initialize user entitlement (invite code, etc.)
+    await initializeUserEntitlement(clerkId)
 
-  // Track signup event
-  await trackEvent('user_signup', clerkId, { email })
+    // Track signup event
+    await trackEvent('user_signup', clerkId, { email })
 
-  // Bind referral if invite code cookie exists
-  const referralResult = await bindReferral()
-  if (referralResult.success && referralResult.inviterCode) {
-    logger.info('New user referred by', { clerkId, inviterCode: referralResult.inviterCode })
-  }
+    // Bind referral if invite code cookie exists
+    const referralResult = await bindReferral()
+    if (referralResult.success && referralResult.inviterCode) {
+      logger.info('New user referred by', { clerkId, inviterCode: referralResult.inviterCode })
+    }
 
-  // Auto-enroll in beta if slots available
-  const betaResult = await checkAndEnrollBeta()
-  if (betaResult.enrolled) {
-    logger.info('New user auto-enrolled in beta', { clerkId })
-    await trackEvent('beta_enrolled', clerkId, { source: 'auto_enroll' })
-  }
+    // Auto-enroll in beta if slots available
+    const betaResult = await checkAndEnrollBeta()
+    if (betaResult.enrolled) {
+      logger.info('New user auto-enrolled in beta', { clerkId })
+      await trackEvent('beta_enrolled', clerkId, { source: 'auto_enroll' })
+    }
 
-  // Get entitlement for trialEndsAt (might have been set by beta enrollment)
-  const entitlement = await db.query.userEntitlements.findFirst({
-    where: eq(userEntitlements.clerkId, clerkId),
-  })
+    // Get entitlement for trialEndsAt (might have been set by beta enrollment)
+    const entitlement = await db.query.userEntitlements.findFirst({
+      where: eq(userEntitlements.clerkId, clerkId),
+    })
 
-  return {
-    ...newUser,
-    plan: newUser.plan as 'free' | 'standard',
-    trialEndsAt: entitlement?.trialEndsAt ?? null,
+    return {
+      ...newUser,
+      plan: newUser.plan as 'free' | 'standard',
+      trialEndsAt: entitlement?.trialEndsAt ?? null,
+    }
+  } catch (error) {
+    // Handle unique constraint violation (race condition: another call created the user)
+    const isUniqueViolation = error && typeof error === 'object' &&
+      (('code' in error && (error as Record<string, unknown>).code === '23505') ||
+       (error instanceof Error && (error.message.includes('unique') || error.message.includes('duplicate'))))
+
+    if (isUniqueViolation) {
+      logger.info('User creation race condition handled', { clerkId })
+      const raceUser = await db.query.users.findFirst({
+        where: eq(users.clerkId, clerkId),
+      })
+      if (raceUser) {
+        const entitlement = await db.query.userEntitlements.findFirst({
+          where: eq(userEntitlements.clerkId, clerkId),
+        })
+        return {
+          ...raceUser,
+          plan: raceUser.plan as 'free' | 'standard',
+          trialEndsAt: entitlement?.trialEndsAt ?? null,
+        }
+      }
+    }
+    throw error
   }
 }
 

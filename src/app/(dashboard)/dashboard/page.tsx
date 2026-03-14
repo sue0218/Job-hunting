@@ -8,8 +8,11 @@ import { getUserEntitlement } from '@/lib/actions/beta'
 import { DashboardContent } from './dashboard-content'
 
 export default async function DashboardPage() {
-  const [user, experiences, esDocuments, interviewSessions, consistencyCheck, entitlement] = await Promise.all([
-    getOrCreateUser(),
+  // Ensure user exists first (sequential) to avoid race condition
+  // where multiple parallel getOrCreateUser() calls try to create the same user
+  const user = await getOrCreateUser()
+
+  const [experiences, esDocuments, interviewSessions, consistencyCheck, entitlement] = await Promise.all([
     getExperiences(),
     getEsDocuments(),
     getInterviewSessions(),

@@ -127,7 +127,7 @@ export default async function AdminBetaPage() {
           <CardContent>
             <div className="text-2xl font-bold">{stats.feedback.total}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              平均NPS: {stats.feedback.avgNps?.toFixed(1) ?? '-'} / 満足度: {stats.feedback.avgSatisfaction?.toFixed(1) ?? '-'}
+              平均NPS: {stats.feedback.avgNps != null ? Number(stats.feedback.avgNps).toFixed(1) : '-'} / 満足度: {stats.feedback.avgSatisfaction != null ? Number(stats.feedback.avgSatisfaction).toFixed(1) : '-'}
             </p>
           </CardContent>
         </Card>

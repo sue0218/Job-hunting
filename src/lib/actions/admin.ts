@@ -35,16 +35,11 @@ export async function getAdminStats() {
 
   try {
     // User stats
-    const sevenDaysAgoDate = new Date()
-    sevenDaysAgoDate.setDate(sevenDaysAgoDate.getDate() - 7)
-    const thirtyDaysAgoDate = new Date()
-    thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
-
     const userStats = await db
       .select({
         total: sql<number>`count(*)`,
-        last7Days: sql<number>`count(*) filter (where created_at >= ${sevenDaysAgoDate})`,
-        last30Days: sql<number>`count(*) filter (where created_at >= ${thirtyDaysAgoDate})`,
+        last7Days: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
+        last30Days: sql<number>`count(*) filter (where created_at >= NOW() - interval '30 days')`,
         withOnboarding: sql<number>`count(*) filter (where onboarding_completed = true)`,
       })
       .from(users)

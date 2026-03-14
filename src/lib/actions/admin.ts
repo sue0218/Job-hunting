@@ -3,6 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { db } from '@/lib/db/client'
 import {
+  users,
   betaCampaigns,
   feedbackSubmissions,
   referrals,
@@ -33,6 +34,21 @@ export async function getAdminStats() {
   }
 
   try {
+    // User stats
+    const sevenDaysAgoDate = new Date()
+    sevenDaysAgoDate.setDate(sevenDaysAgoDate.getDate() - 7)
+    const thirtyDaysAgoDate = new Date()
+    thirtyDaysAgoDate.setDate(thirtyDaysAgoDate.getDate() - 30)
+
+    const userStats = await db
+      .select({
+        total: sql<number>`count(*)`,
+        last7Days: sql<number>`count(*) filter (where created_at >= ${sevenDaysAgoDate})`,
+        last30Days: sql<number>`count(*) filter (where created_at >= ${thirtyDaysAgoDate})`,
+        withOnboarding: sql<number>`count(*) filter (where onboarding_completed = true)`,
+      })
+      .from(users)
+
     // Beta campaign stats
     const campaign = await db.query.betaCampaigns.findFirst({
       where: eq(betaCampaigns.key, process.env.BETA_CAMPAIGN_KEY || 'beta_standard_300_30d'),
@@ -92,6 +108,7 @@ export async function getAdminStats() {
       .orderBy(desc(sql`count(*)`))
 
     return {
+      users: userStats[0] ?? { total: 0, last7Days: 0, last30Days: 0, withOnboarding: 0 },
       campaign: campaign
         ? {
             enabled: campaign.enabled,

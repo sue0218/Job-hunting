@@ -43,8 +43,34 @@ export default async function AdminBetaPage() {
         </p>
       </div>
 
-      {/* Campaign Status */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* User Stats & Campaign Status */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">総ユーザー数</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.users.total}人</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              直近7日: +{stats.users.last7Days} / 30日: +{stats.users.last30Days}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">オンボーディング完了</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.users.withOnboarding}人</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              完了率: {stats.users.total > 0 ? Math.round((stats.users.withOnboarding / stats.users.total) * 100) : 0}%
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Beta Slots */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">

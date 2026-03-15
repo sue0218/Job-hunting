@@ -35,57 +35,52 @@ export async function getOverviewStats() {
   if (!isAdmin) return null
 
   try {
-    const fetchStats = async () => {
-      const [userRows, expRows, esRows, intRows] = await Promise.all([
-        db.select({
-          total: sql<number>`count(*)`,
-          last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
-          last30d: sql<number>`count(*) filter (where created_at >= NOW() - interval '30 days')`,
-        }).from(users),
-        db.select({
-          total: sql<number>`count(*)`,
-          last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
-        }).from(experiences),
-        db.select({
-          total: sql<number>`count(*)`,
-          last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
-        }).from(esDocuments),
-        db.select({
-          total: sql<number>`count(*)`,
-          last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
-          completed: sql<number>`count(*) filter (where status = 'completed')`,
-        }).from(interviewSessions),
-      ])
+    // Sequential queries to avoid connection pool issues with max:1
+    const userRows = await db.select({
+      total: sql<number>`count(*)`,
+      last7d: sql<number>`sum(case when created_at >= now() - interval '7 days' then 1 else 0 end)`,
+      last30d: sql<number>`sum(case when created_at >= now() - interval '30 days' then 1 else 0 end)`,
+    }).from(users)
 
-      const recentUsers = await db
-        .select({
-          id: users.id,
-          email: users.email,
-          name: users.name,
-          plan: users.plan,
-          createdAt: users.createdAt,
-        })
-        .from(users)
-        .orderBy(desc(users.createdAt))
-        .limit(10)
+    const expRows = await db.select({
+      total: sql<number>`count(*)`,
+      last7d: sql<number>`sum(case when created_at >= now() - interval '7 days' then 1 else 0 end)`,
+    }).from(experiences)
 
-      return {
-        users: userRows[0] ?? { total: 0, last7d: 0, last30d: 0 },
-        experiences: expRows[0] ?? { total: 0, last7d: 0 },
-        esDocuments: esRows[0] ?? { total: 0, last7d: 0 },
-        interviews: intRows[0] ?? { total: 0, last7d: 0, completed: 0 },
-        recentUsers,
-      }
+    const esRows = await db.select({
+      total: sql<number>`count(*)`,
+      last7d: sql<number>`sum(case when created_at >= now() - interval '7 days' then 1 else 0 end)`,
+    }).from(esDocuments)
+
+    const intRows = await db.select({
+      total: sql<number>`count(*)`,
+      last7d: sql<number>`sum(case when created_at >= now() - interval '7 days' then 1 else 0 end)`,
+      completed: sql<number>`sum(case when status = 'completed' then 1 else 0 end)`,
+    }).from(interviewSessions)
+
+    const recentUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+        plan: users.plan,
+        createdAt: users.createdAt,
+      })
+      .from(users)
+      .orderBy(desc(users.createdAt))
+      .limit(10)
+
+    return {
+      users: userRows[0] ?? { total: 0, last7d: 0, last30d: 0 },
+      experiences: expRows[0] ?? { total: 0, last7d: 0 },
+      esDocuments: esRows[0] ?? { total: 0, last7d: 0 },
+      interviews: intRows[0] ?? { total: 0, last7d: 0, completed: 0 },
+      recentUsers,
     }
-
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('DB query timeout (15s)')), 15000)
-    )
-
-    return await Promise.race([fetchStats(), timeout])
   } catch (error) {
-    logger.error('Failed to get overview stats', { error })
-    return null
+    const msg = error instanceof Error ? error.message : 'Unknown error'
+    logger.error('Failed to get overview stats', { error: msg })
+    return { error: msg }
   }
 }
 

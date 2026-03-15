@@ -29,8 +29,13 @@ export default async function AdminPage() {
         <p className="text-muted-foreground mt-1">システム全体の統計</p>
       </div>
 
-      {!stats ? (
-        <p className="text-muted-foreground">統計情報の取得に失敗しました</p>
+      {!stats || 'error' in stats ? (
+        <div>
+          <p className="text-muted-foreground">統計情報の取得に失敗しました</p>
+          {stats && 'error' in stats && (
+            <p className="text-xs text-destructive mt-2 font-mono">{stats.error}</p>
+          )}
+        </div>
       ) : (
         <>
           {/* KPI Cards */}

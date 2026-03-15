@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import { BetaCampaignToggle } from './beta-campaign-toggle'
 
+export const maxDuration = 30
+
 export default async function AdminBetaPage() {
   const isAdmin = await isCurrentUserAdmin()
 

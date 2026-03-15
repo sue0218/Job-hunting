@@ -12,6 +12,8 @@ import {
   ChevronRight,
 } from 'lucide-react'
 
+export const maxDuration = 30
+
 export default async function AdminPage() {
   const isAdmin = await isCurrentUserAdmin()
   if (!isAdmin) {

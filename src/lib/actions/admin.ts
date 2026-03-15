@@ -4,6 +4,9 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { db } from '@/lib/db/client'
 import {
   users,
+  experiences,
+  esDocuments,
+  interviewSessions,
   betaCampaigns,
   feedbackSubmissions,
   referrals,
@@ -22,6 +25,61 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
   const user = await currentUser()
   const email = user?.emailAddresses[0]?.emailAddress
   return isAdminEmail(email)
+}
+
+/**
+ * Get overview stats for admin top page
+ */
+export async function getOverviewStats() {
+  const isAdmin = await isCurrentUserAdmin()
+  if (!isAdmin) return null
+
+  try {
+    const [userRows, expRows, esRows, intRows] = await Promise.all([
+      db.select({
+        total: sql<number>`count(*)`,
+        last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
+        last30d: sql<number>`count(*) filter (where created_at >= NOW() - interval '30 days')`,
+      }).from(users),
+      db.select({
+        total: sql<number>`count(*)`,
+        last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
+      }).from(experiences),
+      db.select({
+        total: sql<number>`count(*)`,
+        last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
+      }).from(esDocuments),
+      db.select({
+        total: sql<number>`count(*)`,
+        last7d: sql<number>`count(*) filter (where created_at >= NOW() - interval '7 days')`,
+        completed: sql<number>`count(*) filter (where status = 'completed')`,
+      }).from(interviewSessions),
+    ])
+
+    // Recent signups (last 10 users)
+    const recentUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+        plan: users.plan,
+        createdAt: users.createdAt,
+      })
+      .from(users)
+      .orderBy(desc(users.createdAt))
+      .limit(10)
+
+    return {
+      users: userRows[0] ?? { total: 0, last7d: 0, last30d: 0 },
+      experiences: expRows[0] ?? { total: 0, last7d: 0 },
+      esDocuments: esRows[0] ?? { total: 0, last7d: 0 },
+      interviews: intRows[0] ?? { total: 0, last7d: 0, completed: 0 },
+      recentUsers,
+    }
+  } catch (error) {
+    logger.error('Failed to get overview stats', { error })
+    return null
+  }
 }
 
 /**

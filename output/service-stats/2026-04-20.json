@@ -1,0 +1,34 @@
+{
+  "period": {
+    "from": "2026-04-13T23:34:08.910Z",
+    "to": "2026-04-20T23:34:08.910Z",
+    "label": "2026-04-13 〜 2026-04-20"
+  },
+  "users": {
+    "totalAllTime": 11,
+    "newThisWeek": 1,
+    "activeThisWeek": 0
+  },
+  "esDocuments": {
+    "weeklyCount": 0,
+    "totalAllTime": 2,
+    "topCompaniesAllTime": [],
+    "charLimitDistribution": []
+  },
+  "experiences": {
+    "weeklyCount": 0,
+    "totalAllTime": 4,
+    "topCategoriesAllTime": []
+  },
+  "interviews": {
+    "weeklyCount": 0,
+    "totalAllTime": 3,
+    "byInterviewerType": [],
+    "byType": []
+  },
+  "feedback": {
+    "npsAverage": 6.666666666666667,
+    "satisfactionAverage": 4,
+    "responseCount": 3
+  }
+}
